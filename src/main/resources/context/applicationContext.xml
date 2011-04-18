@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+       default-autowire="byName"
+       >
+    
+    <!-- Para que Spring sepa que vamos a usar anotaciones -->
+    <context:annotation-config />
+    <!-- Desde donde tiene que escanear -->
+    <context:component-scan base-package="mx.edu.um.portlets" />
+    
+    <context:property-placeholder location="file:${user.home}/portal-ext.properties"/>
+
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+          p:driverClassName="${jdbc.default.driverClassName}"
+          p:url="${jdbc.default.url}"
+          p:username="${jdbc.default.username}"
+          p:password="${jdbc.default.password}" />
+          
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration" />
+        <property name="packagesToScan" value="mx.edu.um.portlets"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.cache.use_second_level_cache">true</prop>
+                <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- Transaction manager for a single Hibernate SessionFactory (alternative to JTA) -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <tx:annotation-driven />
+    
+    <!-- Message Source -->
+    <!--bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>messages</value>
+            </list>
+        </property>
+    </bean-->
+
+    <!-- Default View Resolver -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
+        <property name="cache" value="false" /> 
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" /> 
+        <property name="prefix" value="/WEB-INF/jsp/" /> 
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+    <!-- Abstract Default Exception Handler -->
+    <bean id="defaultExceptionHandlerTemplate"
+		class="org.springframework.web.portlet.handler.SimpleMappingExceptionResolver" abstract="true">
+        <property name="defaultErrorView" value="defError" />
+        <property name="exceptionMappings">
+            <props>
+                <prop key="javax.portlet.PortletSecurityException">notAuthorized</prop>
+                <prop key="javax.portlet.UnavailableException">notAvailable</prop>
+            </props>
+        </property>
+    </bean>
+    
+</beans>
