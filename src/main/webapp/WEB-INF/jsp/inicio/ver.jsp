@@ -20,6 +20,8 @@
         <p class="liga">
             <a href="/estudia">LEER MÁS</a>
         </p>
+        <a href="/estudia" class="titulo"><liferay-ui:message key="inicio.versiculo" /></a>
+        ${versiculo}
     </div>
 </div>
 <div id="home-bottom-center" class="home-bottom">

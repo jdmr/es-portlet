@@ -16,7 +16,7 @@
     <bean id="portletModeHandlerMapping" class="org.springframework.web.portlet.handler.PortletModeHandlerMapping">
         <property name="portletModeMap">
             <map> 
-                <entry key="view" value-ref="inicioPortlet" />
+                <entry key="view" value-ref="leccionPortlet" />
             </map> 
         </property>
     </bean>
@@ -30,7 +30,7 @@
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basenames">
             <list>
-                <value>inicio</value> <!-- (localized "messages_xx.properties" files) -->
+                <value>leccion</value> <!-- (localized "messages_xx.properties" files) -->
                 <value>messages</value>
             </list>
         </property>

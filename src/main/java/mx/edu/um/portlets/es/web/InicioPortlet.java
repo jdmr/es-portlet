@@ -1,7 +1,5 @@
 package mx.edu.um.portlets.es.web;
 
-
-
 import com.liferay.portal.kernel.servlet.ImageServletTokenUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -13,6 +11,7 @@ import com.liferay.portlet.asset.service.persistence.AssetEntryQuery;
 import com.liferay.portlet.imagegallery.model.IGImage;
 import com.liferay.portlet.imagegallery.service.IGImageLocalServiceUtil;
 import com.liferay.portlet.journal.model.JournalArticle;
+import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,12 +68,12 @@ public class InicioPortlet {
                 hoy = new DateTime(zone);
             }
 
-            log.debug("Subiendo atributo hoy({}) a la sesion",hoy);
+            log.debug("Subiendo atributo hoy({}) a la sesion", hoy);
             request.getPortletSession().setAttribute("hoy", hoy, PortletSession.APPLICATION_SCOPE);
 
             // Busca el contenido del dia
             String[] tags = getTags(hoy);
-            
+
             long[] assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
 
             assetEntryQuery.setAllTagIds(assetTagIds);
@@ -94,6 +93,25 @@ public class InicioPortlet {
                 }
             }
             
+            log.debug("Buscando el versiculo");
+            tags[3] = "versiculo";
+            assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
+
+            assetEntryQuery.setAllTagIds(assetTagIds);
+
+            results = AssetEntryServiceUtil.getEntries(assetEntryQuery);
+
+            for (AssetEntry asset : results) {
+                if (asset.getClassName().equals(JournalArticle.class.getName())) {
+                    JournalArticle ja = JournalArticleLocalServiceUtil.getLatestArticle(asset.getClassPK());
+                    AssetEntryServiceUtil.incrementViewCounter(asset.getClassName(), ja.getResourcePrimKey());
+                    String contenido = JournalArticleLocalServiceUtil.getArticleContent(ja.getGroupId(), ja.getArticleId(), "view", "" + themeDisplay.getLocale(), themeDisplay);
+                    
+                    model.addAttribute("versiculo", contenido);
+                    break;
+                }
+            }
+
             // Tags para buscar las fotos de la semana
             tags[3] = "fotos";
             assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
@@ -105,15 +123,15 @@ public class InicioPortlet {
             log.debug("Buscando las fotos");
             int fotos = 0;
             for (AssetEntry asset : results) {
-                log.debug("ASSET: "+ asset.getClassName());
+                log.debug("ASSET: " + asset.getClassName());
                 if (asset.getClassName().equals(IGImage.class.getName())) {
                     IGImage image = IGImageLocalServiceUtil.getImage(asset.getClassPK());
                     String url = themeDisplay.getPathImage() + "/image_gallery?img_id=" + image.getLargeImageId() + "&t=" + ImageServletTokenUtil.getToken(image.getLargeImageId());
-                    log.debug("URL: {}",url);
-                    model.addAttribute("imagen"+(fotos++), url);
+                    log.debug("URL: {}", url);
+                    model.addAttribute("imagen" + (fotos++), url);
                 }
             }
-            model.addAttribute("cantidadFotos",fotos);
+            model.addAttribute("cantidadFotos", fotos);
 
             // Buscando los temas de dialoga de la semana
             tags[3] = "dialoga";
@@ -122,16 +140,16 @@ public class InicioPortlet {
             assetEntryQuery.setAllTagIds(assetTagIds);
 
             results = AssetEntryServiceUtil.getEntries(assetEntryQuery);
-            
+
             log.debug("Buscando los temas de dialoga");
             List<TemaUtil> temasDialoga = new ArrayList<TemaUtil>();
             for (AssetEntry asset : results) {
                 if (asset.getClassName().equals(JournalArticle.class.getName())) {
-                    temasDialoga.add(new TemaUtil(asset.getTitle().toUpperCase(), asset.getDescription()));
+                    temasDialoga.add(new TemaUtil(asset.getTitle().toUpperCase(), StringUtil.shorten(asset.getDescription(), 150)));
                 }
             }
-            model.addAttribute("temasDialoga",temasDialoga);
-            
+            model.addAttribute("temasDialoga", temasDialoga);
+
             // Buscando los temas de comunica de la semana
             tags[3] = "comunica";
             assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
@@ -139,16 +157,16 @@ public class InicioPortlet {
             assetEntryQuery.setAllTagIds(assetTagIds);
 
             results = AssetEntryServiceUtil.getEntries(assetEntryQuery);
-            
+
             log.debug("Buscando los temas de comunica");
             List<TemaUtil> temasComunica = new ArrayList<TemaUtil>();
             for (AssetEntry asset : results) {
                 if (asset.getClassName().equals(JournalArticle.class.getName())) {
-                    temasComunica.add(new TemaUtil(asset.getTitle().toUpperCase(), asset.getDescription()));
+                    temasComunica.add(new TemaUtil(asset.getTitle().toUpperCase(), StringUtil.shorten(asset.getDescription(), 150)));
                 }
             }
-            model.addAttribute("temasComunica",temasComunica);
-            
+            model.addAttribute("temasComunica", temasComunica);
+
         } catch (Exception e) {
             log.error("No se pudo cargar el contenido", e);
             throw new RuntimeException("No se pudo cargar el contenido", e);
@@ -194,5 +212,4 @@ public class InicioPortlet {
 
         return tags;
     }
-
 }
