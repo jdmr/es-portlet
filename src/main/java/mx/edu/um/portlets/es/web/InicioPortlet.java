@@ -66,10 +66,10 @@ public class InicioPortlet {
             DateTime hoy = (DateTime) request.getPortletSession().getAttribute("hoy", PortletSession.APPLICATION_SCOPE);
             if (hoy == null) {
                 hoy = new DateTime(zone);
+                log.debug("Subiendo atributo hoy({}) a la sesion", hoy);
+                request.getPortletSession().setAttribute("hoy", hoy, PortletSession.APPLICATION_SCOPE);
             }
 
-            log.debug("Subiendo atributo hoy({}) a la sesion", hoy);
-            request.getPortletSession().setAttribute("hoy", hoy, PortletSession.APPLICATION_SCOPE);
 
             // Busca el contenido del dia
             String[] tags = getTags(hoy);

@@ -5,6 +5,5 @@ target
 .idea
 web-app/WEB-INF/classes
 *.orig
-es-test.log*
-es.log*
+*.log*
 /.settings/

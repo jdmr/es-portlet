@@ -6,5 +6,6 @@
         <portlet id="inicio" />
         <portlet id="versiculo" />
         <portlet id="leccion" />
+        <portlet id="resumenDialoga" />
     </category>
 </display>
