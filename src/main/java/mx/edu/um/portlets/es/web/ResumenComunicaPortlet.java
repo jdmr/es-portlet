@@ -72,7 +72,7 @@ public class ResumenComunicaPortlet {
 
             // Buscando los temas de dialoga de la semana
             String[] tags = getTags(hoy);
-            tags[3] = "dialoga";
+            tags[3] = "comunica";
 
             long[] assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
 
@@ -80,7 +80,7 @@ public class ResumenComunicaPortlet {
 
             List<AssetEntry> results = AssetEntryServiceUtil.getEntries(assetEntryQuery);
 
-            log.debug("Buscando los temas de dialoga");
+            log.debug("Buscando los temas de comunica");
             for (AssetEntry asset : results) {
                 if (asset.getClassName().equals(JournalArticle.class.getName())) {
                     model.addAttribute("tituloTema",asset.getTitle().toUpperCase());

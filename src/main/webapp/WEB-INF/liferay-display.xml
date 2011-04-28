@@ -8,5 +8,6 @@
         <portlet id="leccion" />
         <portlet id="resumenDialoga" />
         <portlet id="resumenComunica" />
+        <portlet id="biblia" />
     </category>
 </display>

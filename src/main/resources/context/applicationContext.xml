@@ -27,6 +27,13 @@
           p:username="${jdbc.default.username}"
           p:password="${jdbc.default.password}" />
           
+    <bean id="bibliaDS"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+          p:driverClassName="${jdbc.default.driverClassName}"
+          p:url="${bibliaDS.url}"
+          p:username="${jdbc.default.username}"
+          p:password="${jdbc.default.password}" />
+          
     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration" />
