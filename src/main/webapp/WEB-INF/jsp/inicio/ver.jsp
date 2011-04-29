@@ -28,10 +28,10 @@
     <p class="titulo"><liferay-ui:message key="inicio.dialoga" /></p>
     <div class="inner-box">
         <c:forEach items="${temasDialoga}" var="tema">
-            <a href="/dialoga" class="titulo">${tema.titulo}</a>
+            <a href="${tema.url}" class="titulo">${tema.titulo}</a>
             <p>${tema.contenido}</p>
             <p class="liga">
-                <a href="/dialoga"><liferay-ui:message key="inicio.leerMas" /></a>
+                <a href="${tema.url}"><liferay-ui:message key="inicio.leerMas" /></a>
             </p>
         </c:forEach>
     </div>
@@ -40,10 +40,10 @@
     <p class="titulo"><liferay-ui:message key="inicio.comunica" /></p>
     <div class="inner-box">
         <c:forEach items="${temasComunica}" var="tema">
-            <a href="/comunica" class="titulo">${tema.titulo}</a>
+            <a href="${tema.url}" class="titulo">${tema.titulo}</a>
             <p>${tema.contenido}</p>
             <p class="liga">
-                <a href="/comunica"><liferay-ui:message key="inicio.leerMas" /></a>
+                <a href="${tema.url}"><liferay-ui:message key="inicio.leerMas" /></a>
             </p>
         </c:forEach>
     </div>

@@ -9,5 +9,6 @@
         <portlet id="resumenDialoga" />
         <portlet id="resumenComunica" />
         <portlet id="biblia" />
+        <portlet id="dialoga" />
     </category>
 </display>

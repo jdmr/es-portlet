@@ -145,7 +145,13 @@ public class InicioPortlet {
             List<TemaUtil> temasDialoga = new ArrayList<TemaUtil>();
             for (AssetEntry asset : results) {
                 if (asset.getClassName().equals(JournalArticle.class.getName())) {
-                    temasDialoga.add(new TemaUtil(asset.getTitle().toUpperCase(), StringUtil.shorten(asset.getDescription(), 150)));
+                    StringBuilder url = new StringBuilder();
+                    url.append("/dialoga?p_p_id=dialoga_WAR_esportlet&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_dialoga_WAR_esportlet_assetId=");
+                    url.append(asset.getPrimaryKey());
+                    url.append("&_dialoga_WAR_esportlet_entradaId=");
+                    url.append(asset.getClassPK());
+                    url.append("&_dialoga_WAR_esportlet_action=completo");
+                    temasDialoga.add(new TemaUtil(asset.getPrimaryKey(),asset.getClassPK(),asset.getTitle().toUpperCase(), StringUtil.shorten(asset.getDescription(), 150), url.toString()));
                 }
             }
             model.addAttribute("temasDialoga", temasDialoga);
@@ -162,7 +168,13 @@ public class InicioPortlet {
             List<TemaUtil> temasComunica = new ArrayList<TemaUtil>();
             for (AssetEntry asset : results) {
                 if (asset.getClassName().equals(JournalArticle.class.getName())) {
-                    temasComunica.add(new TemaUtil(asset.getTitle().toUpperCase(), StringUtil.shorten(asset.getDescription(), 150)));
+                    StringBuilder url = new StringBuilder();
+                    url.append("/comunica?p_p_id=comunica_WAR_esportlet&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_dialoga_WAR_esportlet_assetId=");
+                    url.append(asset.getPrimaryKey());
+                    url.append("&_comunica_WAR_esportlet_entradaId=");
+                    url.append(asset.getClassPK());
+                    url.append("&_comunica_WAR_esportlet_action=completo");
+                    temasComunica.add(new TemaUtil(asset.getPrimaryKey(),asset.getClassPK(),asset.getTitle().toUpperCase(), StringUtil.shorten(asset.getDescription(), 150), url.toString()));
                 }
             }
             model.addAttribute("temasComunica", temasComunica);

@@ -1,6 +1,10 @@
 package mx.edu.um.portlets.es.web;
 
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.service.AssetEntryServiceUtil;
@@ -10,9 +14,12 @@ import com.liferay.portlet.journal.model.JournalArticle;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.TimeZone;
+import javax.portlet.PortletRequest;
 import javax.portlet.PortletSession;
+import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.WindowState;
 import mx.edu.um.portlets.es.utils.ZonaHorariaUtil;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -74,8 +81,17 @@ public class ResumenDialogaPortlet {
             log.debug("Buscando los temas de dialoga");
             for (AssetEntry asset : results) {
                 if (asset.getClassName().equals(JournalArticle.class.getName())) {
-                    model.addAttribute("tituloTema",asset.getTitle().toUpperCase());
-                    model.addAttribute("contenidoTema",asset.getDescription());
+                    User autor = UserLocalServiceUtil.getUser(asset.getUserId());
+                    model.addAttribute("autorTema", autor.getFullName());
+                    model.addAttribute("tituloTema", asset.getTitle().toUpperCase());
+                    model.addAttribute("contenidoTema", asset.getDescription());
+                    StringBuilder url = new StringBuilder();
+                    url.append("/dialoga?p_p_id=dialoga_WAR_esportlet&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_dialoga_WAR_esportlet_assetId=");
+                    url.append(asset.getPrimaryKey());
+                    url.append("&_dialoga_WAR_esportlet_entradaId=");
+                    url.append(asset.getClassPK());
+                    url.append("&_dialoga_WAR_esportlet_action=completo");
+                    model.addAttribute("verTema", url.toString());
                     break;
                 }
             }
@@ -98,29 +114,6 @@ public class ResumenDialogaPortlet {
         tags[1] = "t2";
         Weeks weeks = Weeks.weeksBetween(inicio, hoy);
         tags[2] = "l" + nf.format(weeks.getWeeks() + 1);
-        switch (hoy.getDayOfWeek()) {
-            case 1:
-                tags[3] = "lunes";
-                break;
-            case 2:
-                tags[3] = "martes";
-                break;
-            case 3:
-                tags[3] = "miercoles";
-                break;
-            case 4:
-                tags[3] = "jueves";
-                break;
-            case 5:
-                tags[3] = "viernes";
-                break;
-            case 6:
-                tags[3] = "sabado";
-                break;
-            case 7:
-                tags[3] = "domingo";
-                break;
-        }
         log.debug("TAGS: {} {} {} {}", tags);
 
         return tags;

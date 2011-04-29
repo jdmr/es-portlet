@@ -1,6 +1,8 @@
 package mx.edu.um.portlets.es.web;
 
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.service.AssetEntryServiceUtil;
@@ -74,8 +76,12 @@ public class ResumenComunicaPortlet {
             log.debug("Buscando los temas de comunica");
             for (AssetEntry asset : results) {
                 if (asset.getClassName().equals(JournalArticle.class.getName())) {
+                    User autor = UserLocalServiceUtil.getUser(asset.getUserId());
+                    model.addAttribute("autorTema", autor.getFullName());
                     model.addAttribute("tituloTema",asset.getTitle().toUpperCase());
                     model.addAttribute("contenidoTema",asset.getDescription());
+                    model.addAttribute("assetId",asset.getPrimaryKey());
+                    model.addAttribute("entradaId",asset.getClassPK());
                     break;
                 }
             }
@@ -98,29 +104,6 @@ public class ResumenComunicaPortlet {
         tags[1] = "t2";
         Weeks weeks = Weeks.weeksBetween(inicio, hoy);
         tags[2] = "l" + nf.format(weeks.getWeeks() + 1);
-        switch (hoy.getDayOfWeek()) {
-            case 1:
-                tags[3] = "lunes";
-                break;
-            case 2:
-                tags[3] = "martes";
-                break;
-            case 3:
-                tags[3] = "miercoles";
-                break;
-            case 4:
-                tags[3] = "jueves";
-                break;
-            case 5:
-                tags[3] = "viernes";
-                break;
-            case 6:
-                tags[3] = "sabado";
-                break;
-            case 7:
-                tags[3] = "domingo";
-                break;
-        }
         log.debug("TAGS: {} {} {} {}", tags);
 
         return tags;
