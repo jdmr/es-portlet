@@ -57,7 +57,7 @@
                     classPK="${leccion.resourcePrimKey}"
                     />
             </div>
-            <div style="padding: 10px 0;">
+            <div class="mensajesDiscusion">
                 <!-- AddThis Button BEGIN -->
                 <div class="addthis_toolbox addthis_default_style ">
                     <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
@@ -68,7 +68,7 @@
                 <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4d8a78014d97ad87"></script>
                 <!-- AddThis Button END -->
             </div>
-            <div style="padding: 10px 0;">
+            <div class="mensajesDiscusion">
                 <c:if test="${discussionMessages != null}">
                     <liferay-ui:tabs names="comments" />
                 </c:if>

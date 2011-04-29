@@ -54,13 +54,13 @@
     <tx:annotation-driven />
     
     <!-- Message Source -->
-    <!--bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basenames">
             <list>
                 <value>messages</value>
             </list>
         </property>
-    </bean-->
+    </bean>
 
     <!-- Default View Resolver -->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
