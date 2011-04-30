@@ -10,5 +10,6 @@
         <portlet id="resumenComunica" />
         <portlet id="biblia" />
         <portlet id="dialoga" />
+        <portlet id="comunica" />
     </category>
 </display>

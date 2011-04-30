@@ -61,10 +61,10 @@
             </div>
             <div class="botones">
                 <div style="float:left;padding-right: 10px;">
-                    <a class="importante" href="${messageUrl}" target="_blank"><liferay-ui:message key="dialoga.opina" /></a>
+                    <a class="importante" href="${messageUrl}" target="_blank"><liferay-ui:message key="comunica.opina" /></a>
                 </div>
                 <div>
-                    <a class="importante" href="${regresar}"><liferay-ui:message key="dialoga.regresa" /></a>
+                    <a class="importante" href="${regresar}"><liferay-ui:message key="comunica.regresa" /></a>
                 </div>
             </div>
         </div>        

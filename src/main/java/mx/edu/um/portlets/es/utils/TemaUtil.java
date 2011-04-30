@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package mx.edu.um.portlets.es.utils;
 
 /**
@@ -18,14 +14,6 @@ public class TemaUtil {
     
     public TemaUtil() {}
     
-    public TemaUtil(Long assetId, Long entradaId, String titulo, String contenido, String url) {
-        this.assetId = assetId;
-        this.entradaId = entradaId;
-        this.titulo = titulo;
-        this.contenido = contenido;
-        this.url = url;
-    }
-
     public TemaUtil(Long assetId, Long entradaId, String titulo, String autor, String contenido, String url) {
         this.assetId = assetId;
         this.entradaId = entradaId;

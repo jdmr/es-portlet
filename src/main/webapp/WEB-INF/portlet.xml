@@ -237,4 +237,37 @@
             <role-name>user</role-name>
         </security-role-ref>
     </portlet>
+    <portlet>
+        <description>Comunica</description>
+        <portlet-name>comunica</portlet-name>
+        <display-name>Comunica</display-name>
+        <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>/WEB-INF/classes/context/portlet/comunica.xml</value>
+        </init-param>
+        <expiration-cache>0</expiration-cache>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+        </supports>
+        <resource-bundle>comunica</resource-bundle>
+        <portlet-info>
+            <title>Comunica</title>
+            <short-title>Comunica</short-title>
+            <keywords>comunica</keywords>
+        </portlet-info>
+        <security-role-ref>
+            <role-name>administrator</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>guest</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>power-user</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>user</role-name>
+        </security-role-ref>
+    </portlet>
 </portlet-app>

@@ -29,6 +29,7 @@
     <div class="inner-box">
         <c:forEach items="${temasDialoga}" var="tema">
             <a href="${tema.url}" class="titulo">${tema.titulo}</a>
+            <p class="autor">${tema.autor}</p>
             <p>${tema.contenido}</p>
             <p class="liga">
                 <a href="${tema.url}"><liferay-ui:message key="inicio.leerMas" /></a>
@@ -41,6 +42,7 @@
     <div class="inner-box">
         <c:forEach items="${temasComunica}" var="tema">
             <a href="${tema.url}" class="titulo">${tema.titulo}</a>
+            <p class="autor">${tema.autor}</p>
             <p>${tema.contenido}</p>
             <p class="liga">
                 <a href="${tema.url}"><liferay-ui:message key="inicio.leerMas" /></a>

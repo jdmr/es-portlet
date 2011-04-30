@@ -3,6 +3,8 @@ package mx.edu.um.portlets.es.web;
 import com.liferay.portal.kernel.servlet.ImageServletTokenUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.service.AssetEntryServiceUtil;
@@ -151,7 +153,8 @@ public class InicioPortlet {
                     url.append("&_dialoga_WAR_esportlet_entradaId=");
                     url.append(asset.getClassPK());
                     url.append("&_dialoga_WAR_esportlet_action=completo");
-                    temasDialoga.add(new TemaUtil(asset.getPrimaryKey(),asset.getClassPK(),asset.getTitle().toUpperCase(), StringUtil.shorten(asset.getDescription(), 150), url.toString()));
+                    User autor = UserLocalServiceUtil.getUser(asset.getUserId());
+                    temasDialoga.add(new TemaUtil(asset.getPrimaryKey(),asset.getClassPK(),asset.getTitle().toUpperCase(), autor.getFullName(), StringUtil.shorten(asset.getDescription(), 150), url.toString()));
                 }
             }
             model.addAttribute("temasDialoga", temasDialoga);
@@ -169,12 +172,13 @@ public class InicioPortlet {
             for (AssetEntry asset : results) {
                 if (asset.getClassName().equals(JournalArticle.class.getName())) {
                     StringBuilder url = new StringBuilder();
-                    url.append("/comunica?p_p_id=comunica_WAR_esportlet&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_dialoga_WAR_esportlet_assetId=");
+                    url.append("/comunica?p_p_id=comunica_WAR_esportlet&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_comunica_WAR_esportlet_assetId=");
                     url.append(asset.getPrimaryKey());
                     url.append("&_comunica_WAR_esportlet_entradaId=");
                     url.append(asset.getClassPK());
                     url.append("&_comunica_WAR_esportlet_action=completo");
-                    temasComunica.add(new TemaUtil(asset.getPrimaryKey(),asset.getClassPK(),asset.getTitle().toUpperCase(), StringUtil.shorten(asset.getDescription(), 150), url.toString()));
+                    User autor = UserLocalServiceUtil.getUser(asset.getUserId());
+                    temasComunica.add(new TemaUtil(asset.getPrimaryKey(),asset.getClassPK(),asset.getTitle().toUpperCase(), autor.getFullName(), StringUtil.shorten(asset.getDescription(), 150), url.toString()));
                 }
             }
             model.addAttribute("temasComunica", temasComunica);

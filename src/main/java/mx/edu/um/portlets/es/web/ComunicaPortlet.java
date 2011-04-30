@@ -53,17 +53,17 @@ import org.springframework.web.bind.support.SessionStatus;
  */
 @Controller
 @RequestMapping("VIEW")
-public class DialogaPortlet {
+public class ComunicaPortlet {
 
-    private static final Logger log = LoggerFactory.getLogger(DialogaPortlet.class);
+    private static final Logger log = LoggerFactory.getLogger(ComunicaPortlet.class);
 
-    public DialogaPortlet() {
-        log.info("Se ha creado una nueva instancia del portlet de dialoga");
+    public ComunicaPortlet() {
+        log.info("Se ha creado una nueva instancia del portlet de comunica");
     }
 
     @RequestMapping
     public String ver(RenderRequest request, RenderResponse response, Model model) {
-        log.debug("Mostrando los articulos de dialoga");
+        log.debug("Mostrando los articulos de comunica");
         TimeZone tz = null;
         DateTimeZone zone = null;
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
@@ -85,9 +85,9 @@ public class DialogaPortlet {
                 request.getPortletSession().setAttribute("hoy", hoy, PortletSession.APPLICATION_SCOPE);
             }
 
-            // Buscando los temas de dialoga de la semana
+            // Buscando los temas de comunica de la semana
             String[] tags = getTags(hoy);
-            tags[3] = "dialoga";
+            tags[3] = "comunica";
 
             long[] assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
 
@@ -95,7 +95,7 @@ public class DialogaPortlet {
 
             List<AssetEntry> results = AssetEntryServiceUtil.getEntries(assetEntryQuery);
 
-            log.debug("Buscando los temas de dialoga");
+            log.debug("Buscando los temas de comunica");
             int cont = 1;
             for (AssetEntry asset : results) {
                 if (asset.getClassName().equals(JournalArticle.class.getName())) {
@@ -104,7 +104,8 @@ public class DialogaPortlet {
                     contenido = HtmlUtil.stripHtml(contenido);
                     contenido = StringUtil.shorten(contenido, 700);
                     User autor = UserLocalServiceUtil.getUser(asset.getUserId());
-                    model.addAttribute("tema" + (cont++), new TemaUtil(asset.getPrimaryKey(),asset.getClassPK(), asset.getTitle().toUpperCase(), autor.getFullName(), contenido, null));
+                    TemaUtil tema = new TemaUtil(asset.getPrimaryKey(),asset.getClassPK(), asset.getTitle().toUpperCase(), autor.getFullName(), contenido, null);
+                    model.addAttribute("tema" + (cont++), tema);
                 }
             }
             
@@ -113,7 +114,7 @@ public class DialogaPortlet {
             throw new RuntimeException("No se pudo cargar el contenido", e);
         }
 
-        return "dialoga/ver";
+        return "comunica/ver";
     }
 
     @RequestMapping(params = "action=completo")
@@ -130,8 +131,6 @@ public class DialogaPortlet {
             model.addAttribute("assetEntry", assetEntry);
             model.addAttribute("contenido",contenido);
             model.addAttribute("autor",autor.getFullName());
-            
-            log.debug("Keys {}-{}-{}",new Long[]{entrada.getId(), entrada.getPrimaryKey(), entrada.getResourcePrimKey()});
 
             model.addAttribute("currentURL", themeDisplay.getURLCurrent());
             int discussionMessagesCount = MBMessageLocalServiceUtil.getDiscussionMessagesCount(PortalUtil.getClassNameId(BlogsEntry.class.getName()), entrada.getPrimaryKey(), WorkflowConstants.STATUS_APPROVED);
@@ -161,7 +160,7 @@ public class DialogaPortlet {
             log.error("No se pudo cargar el contenido", e);
             throw new RuntimeException("No se pudo cargar el contenido", e);
         }
-        return "dialoga/completo";
+        return "comunica/completo";
     }
 
     @RequestMapping(params = "action=discusion")
