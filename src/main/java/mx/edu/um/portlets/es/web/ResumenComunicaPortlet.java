@@ -36,7 +36,7 @@ public class ResumenComunicaPortlet {
     private static final Logger log = LoggerFactory.getLogger(ResumenComunicaPortlet.class);
 
     public ResumenComunicaPortlet() {
-        log.info("Se ha creado una nueva instancia del portlet de resumen de dialoga");
+        log.info("Se ha creado una nueva instancia del portlet de resumen de comunica");
     }
 
     @RequestMapping
@@ -63,7 +63,7 @@ public class ResumenComunicaPortlet {
                 request.getPortletSession().setAttribute("hoy", hoy, PortletSession.APPLICATION_SCOPE);
             }
 
-            // Buscando los temas de dialoga de la semana
+            // Buscando los temas de comunica de la semana
             String[] tags = getTags(hoy);
             tags[3] = "comunica";
 
@@ -82,6 +82,13 @@ public class ResumenComunicaPortlet {
                     model.addAttribute("contenidoTema",asset.getDescription());
                     model.addAttribute("assetId",asset.getPrimaryKey());
                     model.addAttribute("entradaId",asset.getClassPK());
+                    StringBuilder url = new StringBuilder();
+                    url.append("/comunica?p_p_id=comunica_WAR_esportlet&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_comunica_WAR_esportlet_assetId=");
+                    url.append(asset.getPrimaryKey());
+                    url.append("&_comunica_WAR_esportlet_entradaId=");
+                    url.append(asset.getClassPK());
+                    url.append("&_comunica_WAR_esportlet_action=completo");
+                    model.addAttribute("verTema", url.toString());
                     break;
                 }
             }
@@ -91,7 +98,7 @@ public class ResumenComunicaPortlet {
             throw new RuntimeException("No se pudo cargar el contenido", e);
         }
 
-        return "resumenDialoga/ver";
+        return "resumenComunica/ver";
     }
 
     private String[] getTags(DateTime hoy) {

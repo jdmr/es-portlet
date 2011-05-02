@@ -124,15 +124,13 @@ public class DialogaPortlet {
             JournalArticle entrada = JournalArticleLocalServiceUtil.getLatestArticle(entradaId);
             String contenido = JournalArticleLocalServiceUtil.getArticleContent(entrada.getGroupId(), entrada.getArticleId(), "view", ""+themeDisplay.getLocale(), themeDisplay);
             AssetEntry assetEntry = AssetEntryServiceUtil.getEntry(assetId);
-            AssetEntryServiceUtil.incrementViewCounter(assetEntry.getClassName(), entrada.getPrimaryKey());
+            AssetEntryServiceUtil.incrementViewCounter(assetEntry.getClassName(), entradaId);
+            assetEntry.setViewCount(assetEntry.getViewCount()+1);
             User autor = UserLocalServiceUtil.getUser(assetEntry.getUserId());
             model.addAttribute("entrada", entrada);
             model.addAttribute("assetEntry", assetEntry);
             model.addAttribute("contenido",contenido);
             model.addAttribute("autor",autor.getFullName());
-            
-            log.debug("Keys {}-{}-{}",new Long[]{entrada.getId(), entrada.getPrimaryKey(), entrada.getResourcePrimKey()});
-
             model.addAttribute("currentURL", themeDisplay.getURLCurrent());
             int discussionMessagesCount = MBMessageLocalServiceUtil.getDiscussionMessagesCount(PortalUtil.getClassNameId(BlogsEntry.class.getName()), entrada.getPrimaryKey(), WorkflowConstants.STATUS_APPROVED);
             if (discussionMessagesCount > 0) {
@@ -150,9 +148,7 @@ public class DialogaPortlet {
             List<AssetEntry> results = AssetEntryServiceUtil.getEntries(assetEntryQuery);
 
             for (AssetEntry asset : results) {
-                log.debug("Asset: " + asset.getTitle() + " : " + asset.getDescription() + " : " + asset.getMimeType() + " : " + asset.getClassName());
                 if (asset.getClassName().equals(MBMessage.class.getName())) {
-                    log.debug("MBMessage: {} {}", asset.getPrimaryKey(), asset.getClassPK());
                     model.addAttribute("messageUrl", "/foros/-/message_boards/view_message/" + asset.getClassPK());
                     break;
                 }

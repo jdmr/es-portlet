@@ -17,13 +17,13 @@
                 </c:choose>
                 <liferay-ui:flags
                     className="<%= com.liferay.portlet.journal.model.JournalArticle.class.getName() %>"
-                    classPK="${entrada.id}"
+                    classPK="${entrada.resourcePrimKey}"
                     contentTitle="${entrada.title}"
                     reportedUserId="${entrada.userId}"
                     />
                 <liferay-ui:ratings
                     className="<%= com.liferay.portlet.journal.model.JournalArticle.class.getName() %>"
-                    classPK="${entrada.id}"
+                    classPK="${entrada.resourcePrimKey}"
                     />
             </div>
             <div style="padding: 10px 0;">

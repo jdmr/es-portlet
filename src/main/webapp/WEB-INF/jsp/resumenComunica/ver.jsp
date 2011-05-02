@@ -1,9 +1,4 @@
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
-<portlet:renderURL var="verTema" >
-    <portlet:param name="assetId" value="${assetId}" />
-    <portlet:param name="entradaId" value="${entradaId}" />
-    <portlet:param name="action" value="completo" />
-</portlet:renderURL>
 <c:if test="${contenidoTema != null}">
     <div class="caja2">
         <div class="resumenArticulo">
