@@ -45,7 +45,7 @@ public class InicioPortlet {
     private static final Logger log = LoggerFactory.getLogger(InicioPortlet.class);
 
     public InicioPortlet() {
-        log.debug("Se ha creado una nueva instancia del portlet de inicio");
+        log.info("Se ha creado una nueva instancia del portlet de inicio");
     }
 
     @RequestMapping

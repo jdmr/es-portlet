@@ -270,4 +270,37 @@
             <role-name>user</role-name>
         </security-role-ref>
     </portlet>
+    <portlet>
+        <description>Navega</description>
+        <portlet-name>navega</portlet-name>
+        <display-name>Navega</display-name>
+        <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>/WEB-INF/classes/context/portlet/navega.xml</value>
+        </init-param>
+        <expiration-cache>0</expiration-cache>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+        </supports>
+        <resource-bundle>navega</resource-bundle>
+        <portlet-info>
+            <title>Navega</title>
+            <short-title>Navega</short-title>
+            <keywords>navega</keywords>
+        </portlet-info>
+        <security-role-ref>
+            <role-name>administrator</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>guest</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>power-user</role-name>
+        </security-role-ref>
+        <security-role-ref>
+            <role-name>user</role-name>
+        </security-role-ref>
+    </portlet>
 </portlet-app>

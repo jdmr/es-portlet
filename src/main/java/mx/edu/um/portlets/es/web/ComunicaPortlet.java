@@ -174,7 +174,7 @@ public class ComunicaPortlet {
         try {
             String cmd = ParamUtil.getString(request, Constants.CMD);
             if (cmd.equals(Constants.ADD) || cmd.equals(Constants.UPDATE)) {
-                MBMessage message = updateMessage(request);
+                updateMessage(request);
             } else if (cmd.equals(Constants.DELETE)) {
                 deleteMessage(request);
             }

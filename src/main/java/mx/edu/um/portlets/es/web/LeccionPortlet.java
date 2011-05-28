@@ -54,7 +54,7 @@ public class LeccionPortlet {
     private static final Logger log = LoggerFactory.getLogger(LeccionPortlet.class);
 
     public LeccionPortlet() {
-        log.debug("Se ha creado una nueva instancia del portlet de lecciones");
+        log.info("Se ha creado una nueva instancia del portlet de lecciones");
     }
 
     @RequestMapping
@@ -80,6 +80,8 @@ public class LeccionPortlet {
                 log.info("No encontre el atributo hoy");
                 hoy = new DateTime(zone);
                 request.getPortletSession().setAttribute("hoy", hoy, PortletSession.APPLICATION_SCOPE);
+                DateTimeFormatter fmt3 = DateTimeFormat.forPattern("dd/MM/yyyy");
+                request.getPortletSession().setAttribute("hoyString", fmt3.print(hoy));
             }
 
             long[] assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, getTags(hoy));
@@ -151,6 +153,9 @@ public class LeccionPortlet {
             hoy = hoy.withDayOfMonth(26);
         }
         request.getPortletSession().setAttribute("hoy", hoy, PortletSession.APPLICATION_SCOPE);
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
+        request.getPortletSession().setAttribute("hoyString", fmt.print(hoy), PortletSession.APPLICATION_SCOPE);
+
         sessionStatus.setComplete();
 
     }
@@ -167,7 +172,7 @@ public class LeccionPortlet {
         try {
             String cmd = ParamUtil.getString(request, Constants.CMD);
             if (cmd.equals(Constants.ADD) || cmd.equals(Constants.UPDATE)) {
-                MBMessage message = updateMessage(request);
+                updateMessage(request);
             } else if (cmd.equals(Constants.DELETE)) {
                 deleteMessage(request);
             }

@@ -27,7 +27,7 @@
       <MaxFileSize>100KB</MaxFileSize>
     </triggeringPolicy>
   </appender>
-  <logger name="mx.edu.um.portlets" level="DEBUG"/>
+  <logger name="mx.edu.um.portlets" level="INFO"/>
   <root level="WARN">
     <appender-ref ref="stdout"/>
     <appender-ref ref="R"/>
