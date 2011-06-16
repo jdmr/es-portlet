@@ -30,10 +30,10 @@ public class TagsUtil {
         nf.setMinimumIntegerDigits(2);
         Weeks weeks = null;
         tags[0] = new Integer(hoy.getYear()).toString();
-        if (hoy.isAfter(inicio) && hoy.isBefore(t3a2011)) {
+        if (hoy.isEqual(inicio) || (hoy.isAfter(inicio) && hoy.isBefore(t3a2011))) {
             tags[1] = "t2";
             weeks = Weeks.weeksBetween(inicio, hoy);
-        } else if (hoy.isAfter(t3a2011) && hoy.isBefore(t4a2011)) {
+        } else if (hoy.isEqual(t3a2011) || (hoy.isAfter(t3a2011) && hoy.isBefore(t4a2011))) {
             tags[1] = "t3";
             weeks = Weeks.weeksBetween(t3a2011, hoy);
         } else {
