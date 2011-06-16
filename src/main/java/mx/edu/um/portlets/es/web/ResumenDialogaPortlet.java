@@ -1,6 +1,5 @@
 package mx.edu.um.portlets.es.web;
 
-import java.text.NumberFormat;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -12,7 +11,6 @@ import mx.edu.um.portlets.es.utils.ZonaHorariaUtil;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.Weeks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -28,6 +26,7 @@ import com.liferay.portlet.asset.service.AssetEntryServiceUtil;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.asset.service.persistence.AssetEntryQuery;
 import com.liferay.portlet.journal.model.JournalArticle;
+import mx.edu.um.portlets.es.utils.TagsUtil;
 
 /**
  *
@@ -68,7 +67,7 @@ public class ResumenDialogaPortlet {
             }
 
             // Buscando los temas de dialoga de la semana
-            String[] tags = getTags(hoy);
+            String[] tags = TagsUtil.getTags(new String[4], hoy);
             tags[3] = "dialoga";
 
             long[] assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
@@ -103,18 +102,4 @@ public class ResumenDialogaPortlet {
         return "resumenDialoga/ver";
     }
 
-    private String[] getTags(DateTime hoy) {
-        String[] tags = new String[4];
-        DateTime inicio = new DateTime(hoy.getYear(), 3, 26, 0, 0, 0, 0, hoy.getZone());
-        log.debug("HOY: {}", hoy);
-        NumberFormat nf = NumberFormat.getInstance();
-        nf.setMinimumIntegerDigits(2);
-        tags[0] = new Integer(hoy.getYear()).toString();
-        tags[1] = "t2";
-        Weeks weeks = Weeks.weeksBetween(inicio, hoy);
-        tags[2] = "l" + nf.format(weeks.getWeeks() + 1);
-        log.debug("TAGS: {} {} {} {}", tags);
-
-        return tags;
-    }
 }

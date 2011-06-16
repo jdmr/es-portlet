@@ -8,16 +8,15 @@ import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.asset.service.persistence.AssetEntryQuery;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
-import java.text.NumberFormat;
 import java.util.List;
 import java.util.TimeZone;
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import mx.edu.um.portlets.es.utils.TagsUtil;
 import mx.edu.um.portlets.es.utils.ZonaHorariaUtil;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.Weeks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -64,7 +63,8 @@ public class VersiculoPortlet {
             }
 
             // Busca el contenido del dia
-            String[] tags = getTags(hoy);
+            String[] tags = TagsUtil.getTags(new String[4], hoy);
+            tags[3] = "versiculo";
 
             long[] assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
 
@@ -89,23 +89,4 @@ public class VersiculoPortlet {
         return "versiculo/ver";
     }
 
-    private String[] getTags(DateTime hoy) {
-        String[] tags = new String[4];
-        DateTime inicio = new DateTime(hoy.getYear(), 3, 26, 0, 0, 0, 0, hoy.getZone());
-        log.debug("HOY: {}", hoy);
-        NumberFormat nf = NumberFormat.getInstance();
-        nf.setMinimumIntegerDigits(2);
-        tags[0] = new Integer(hoy.getYear()).toString();
-        tags[1] = "t2";
-        if (hoy.isBefore(inicio)) {
-            tags[2] = "l01";
-        } else {
-            Weeks weeks = Weeks.weeksBetween(inicio, hoy);
-            tags[2] = "l" + nf.format(weeks.getWeeks() + 1);
-        }
-        tags[3] = "versiculo";
-        log.debug("TAGS: {} {} {} {}", tags);
-
-        return tags;
-    }
 }

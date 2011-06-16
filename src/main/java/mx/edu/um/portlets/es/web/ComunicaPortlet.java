@@ -23,7 +23,6 @@ import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBMessageServiceUtil;
-import java.text.NumberFormat;
 import java.util.List;
 import java.util.TimeZone;
 import javax.portlet.ActionRequest;
@@ -32,11 +31,11 @@ import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import mx.edu.um.portlets.es.utils.EstadisticasUtil;
+import mx.edu.um.portlets.es.utils.TagsUtil;
 import mx.edu.um.portlets.es.utils.TemaUtil;
 import mx.edu.um.portlets.es.utils.ZonaHorariaUtil;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.Weeks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -86,7 +85,7 @@ public class ComunicaPortlet {
             }
 
             // Buscando los temas de comunica de la semana
-            String[] tags = getTags(hoy);
+            String[] tags = TagsUtil.getTags(new String[4], hoy);
             tags[3] = "comunica";
 
             long[] assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
@@ -250,18 +249,4 @@ public class ComunicaPortlet {
         return message;
     }
 
-    private String[] getTags(DateTime hoy) {
-        String[] tags = new String[4];
-        DateTime inicio = new DateTime(hoy.getYear(), 3, 26, 0, 0, 0, 0, hoy.getZone());
-        log.debug("HOY: {}", hoy);
-        NumberFormat nf = NumberFormat.getInstance();
-        nf.setMinimumIntegerDigits(2);
-        tags[0] = new Integer(hoy.getYear()).toString();
-        tags[1] = "t2";
-        Weeks weeks = Weeks.weeksBetween(inicio, hoy);
-        tags[2] = "l" + nf.format(weeks.getWeeks() + 1);
-        log.debug("TAGS: {} {} {} {}", tags);
-
-        return tags;
-    }
 }

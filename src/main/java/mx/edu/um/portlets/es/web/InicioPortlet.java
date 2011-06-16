@@ -14,18 +14,17 @@ import com.liferay.portlet.imagegallery.model.IGImage;
 import com.liferay.portlet.imagegallery.service.IGImageLocalServiceUtil;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import mx.edu.um.portlets.es.utils.TagsUtil;
 import mx.edu.um.portlets.es.utils.TemaUtil;
 import mx.edu.um.portlets.es.utils.ZonaHorariaUtil;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.Weeks;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
@@ -74,7 +73,7 @@ public class InicioPortlet {
 
 
             // Busca el contenido del dia
-            String[] tags = getTags(hoy);
+            String[] tags = TagsUtil.getTagsConDia(new String[4], hoy);
 
             long[] assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
 
@@ -191,41 +190,4 @@ public class InicioPortlet {
         return "inicio/ver";
     }
 
-    private String[] getTags(DateTime hoy) {
-        String[] tags = new String[4];
-        DateTime inicio = new DateTime(hoy.getYear(), 3, 26, 0, 0, 0, 0, hoy.getZone());
-        log.debug("HOY: {}", hoy);
-        NumberFormat nf = NumberFormat.getInstance();
-        nf.setMinimumIntegerDigits(2);
-        tags[0] = new Integer(hoy.getYear()).toString();
-        tags[1] = "t2";
-        Weeks weeks = Weeks.weeksBetween(inicio, hoy);
-        tags[2] = "l" + nf.format(weeks.getWeeks() + 1);
-        switch (hoy.getDayOfWeek()) {
-            case 1:
-                tags[3] = "lunes";
-                break;
-            case 2:
-                tags[3] = "martes";
-                break;
-            case 3:
-                tags[3] = "miercoles";
-                break;
-            case 4:
-                tags[3] = "jueves";
-                break;
-            case 5:
-                tags[3] = "viernes";
-                break;
-            case 6:
-                tags[3] = "sabado";
-                break;
-            case 7:
-                tags[3] = "domingo";
-                break;
-        }
-        log.debug("TAGS: {} {} {} {}", tags);
-
-        return tags;
-    }
 }
