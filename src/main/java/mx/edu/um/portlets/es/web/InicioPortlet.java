@@ -1,6 +1,5 @@
 package mx.edu.um.portlets.es.web;
 
-import com.liferay.portal.kernel.servlet.ImageServletTokenUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
@@ -10,8 +9,6 @@ import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.service.AssetEntryServiceUtil;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.asset.service.persistence.AssetEntryQuery;
-import com.liferay.portlet.imagegallery.model.IGImage;
-import com.liferay.portlet.imagegallery.service.IGImageLocalServiceUtil;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
 import java.util.ArrayList;
@@ -114,25 +111,25 @@ public class InicioPortlet {
             }
 
             // Tags para buscar las fotos de la semana
-            tags[3] = "fotos";
-            assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
-
-            assetEntryQuery.setAllTagIds(assetTagIds);
-
-            results = AssetEntryServiceUtil.getEntries(assetEntryQuery);
-
-            log.debug("Buscando las fotos");
-            int fotos = 0;
-            for (AssetEntry asset : results) {
-                log.debug("ASSET: " + asset.getClassName());
-                if (asset.getClassName().equals(IGImage.class.getName())) {
-                    IGImage image = IGImageLocalServiceUtil.getImage(asset.getClassPK());
-                    String url = themeDisplay.getPathImage() + "/image_gallery?img_id=" + image.getLargeImageId() + "&t=" + ImageServletTokenUtil.getToken(image.getLargeImageId());
-                    log.debug("URL: {}", url);
-                    model.addAttribute("imagen" + (fotos++), url);
-                }
-            }
-            model.addAttribute("cantidadFotos", fotos);
+//            log.debug("Buscando las fotos");
+//            tags[3] = "fotos";
+//            assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
+//
+//            assetEntryQuery.setAllTagIds(assetTagIds);
+//
+//            results = AssetEntryServiceUtil.getEntries(assetEntryQuery);
+//
+//            int fotos = 0;
+//            for (AssetEntry asset : results) {
+//                log.debug("ASSET: " + asset.getClassName());
+//                if (asset.getClassName().equals(IGImage.class.getName())) {
+//                    IGImage image = IGImageLocalServiceUtil.getImage(asset.getClassPK());
+//                    String url = themeDisplay.getPathImage() + "/image_gallery?img_id=" + image.getLargeImageId() + "&t=" + ImageServletTokenUtil.getToken(image.getLargeImageId());
+//                    log.debug("URL: {}", url);
+//                    model.addAttribute("imagen" + (fotos++), url);
+//                }
+//            }
+//            model.addAttribute("cantidadFotos", fotos);
 
             // Buscando los temas de dialoga de la semana
             tags[3] = "dialoga";

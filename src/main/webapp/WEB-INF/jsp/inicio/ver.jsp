@@ -1,7 +1,14 @@
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 
 <div id="home-top-left">
-    <img alt="" src="${imagen0}" />
+    <p style="text-align:center;">
+    <iframe 
+        src="http://player.vimeo.com/video/25647043?title=0&amp;byline=0&amp;portrait=0" 
+        width="640" 
+        height="315" 
+        frameborder="0">
+    </iframe>
+    </p>
 </div>
 <div id="home-top-right">
     <div id="home-menu-first" class="home-menu"><a href="/estudia">${tituloLeccion}</a></div>

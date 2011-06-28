@@ -60,12 +60,7 @@
                     />
             </div>
             <div class="botones">
-                <div style="float:left;padding-right: 10px;">
-                    <a class="importante" href="${messageUrl}" target="_blank"><liferay-ui:message key="dialoga.opina" /></a>
-                </div>
-                <div>
-                    <a class="importante" href="${regresar}"><liferay-ui:message key="dialoga.regresa" /></a>
-                </div>
+                <a class="importante" href="${regresar}"><liferay-ui:message key="dialoga.regresa" /></a>
             </div>
         </div>        
     </div>
