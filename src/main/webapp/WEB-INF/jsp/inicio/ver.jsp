@@ -1,14 +1,21 @@
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 
 <div id="home-top-left">
-    <p style="text-align:center;">
-    <iframe 
-        src="http://player.vimeo.com/video/25833766?title=0&amp;byline=0&amp;portrait=0" 
-        width="640" 
-        height="315" 
-        frameborder="0">
-    </iframe>
-    </p>
+    <c:choose>
+        <c:when test="${videoLeccion != null}">
+            <p style="text-align:center;">
+            <iframe 
+                src="${videoLeccion}" 
+                width="640" 
+                height="315" 
+                frameborder="0">
+            </iframe>
+            </p>
+        </c:when>
+        <c:otherwise>
+            <img alt="" src="${imagenLeccion}" />
+        </c:otherwise>
+    </c:choose>
 </div>
 <div id="home-top-right">
     <div id="home-menu-first" class="home-menu"><a href="/estudia">${tituloLeccion}</a></div>

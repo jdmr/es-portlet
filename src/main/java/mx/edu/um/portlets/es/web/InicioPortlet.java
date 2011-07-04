@@ -9,6 +9,8 @@ import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.service.AssetEntryServiceUtil;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.asset.service.persistence.AssetEntryQuery;
+import com.liferay.portlet.bookmarks.model.BookmarksEntry;
+import com.liferay.portlet.bookmarks.service.BookmarksEntryLocalServiceUtil;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
 import java.util.ArrayList;
@@ -108,6 +110,28 @@ public class InicioPortlet {
                     model.addAttribute("versiculo", contenido);
                     break;
                 }
+            }
+
+            log.debug("Buscando el video");
+            tags[3] = "video";
+            assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
+
+            assetEntryQuery.setAllTagIds(assetTagIds);
+
+            results = AssetEntryServiceUtil.getEntries(assetEntryQuery);
+
+            boolean encontreVideo = false;
+            for (AssetEntry asset : results) {
+                if (asset.getClassName().equals(BookmarksEntry.class.getName())) {
+                    BookmarksEntry be = BookmarksEntryLocalServiceUtil.getBookmarksEntry(asset.getClassPK());
+                    model.addAttribute("videoLeccion", be.getUrl());
+                    encontreVideo = true;
+                    break;
+                }
+            }
+            
+            if (!encontreVideo) {
+                model.addAttribute("imagenLeccion", "/image/image_gallery?uuid=16ba78f1-fa53-43be-9067-ade8d617fe1c&groupId=15711&t=1309812667536");
             }
 
             // Tags para buscar las fotos de la semana
