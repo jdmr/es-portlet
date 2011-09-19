@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package mx.edu.um.portlets.es.utils;
 
 import java.text.NumberFormat;
