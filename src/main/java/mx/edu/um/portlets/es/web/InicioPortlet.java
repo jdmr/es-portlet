@@ -174,7 +174,7 @@ public class InicioPortlet {
                     url.append(asset.getClassPK());
                     url.append("&_dialoga_WAR_esportlet_action=completo");
                     User autor = UserLocalServiceUtil.getUser(asset.getUserId());
-                    temasDialoga.add(new TemaUtil(asset.getPrimaryKey(),asset.getClassPK(),asset.getTitle().toUpperCase(), autor.getFullName(), StringUtil.shorten(asset.getDescription(), 150), url.toString()));
+                    temasDialoga.add(new TemaUtil(asset.getPrimaryKey(),asset.getClassPK(),asset.getTitle().toUpperCase(), autor.getFullName(), StringUtil.shorten(asset.getDescription(), 300), url.toString()));
                 }
             }
             model.addAttribute("temasDialoga", temasDialoga);
@@ -198,7 +198,7 @@ public class InicioPortlet {
                     url.append(asset.getClassPK());
                     url.append("&_comunica_WAR_esportlet_action=completo");
                     User autor = UserLocalServiceUtil.getUser(asset.getUserId());
-                    temasComunica.add(new TemaUtil(asset.getPrimaryKey(),asset.getClassPK(),asset.getTitle().toUpperCase(), autor.getFullName(), StringUtil.shorten(asset.getDescription(), 150), url.toString()));
+                    temasComunica.add(new TemaUtil(asset.getPrimaryKey(),asset.getClassPK(),asset.getTitle().toUpperCase(), autor.getFullName(), StringUtil.shorten(asset.getDescription(), 300), url.toString()));
                 }
             }
             model.addAttribute("temasComunica", temasComunica);
