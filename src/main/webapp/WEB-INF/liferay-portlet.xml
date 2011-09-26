@@ -36,9 +36,6 @@
         <portlet-name>biblia</portlet-name>
         <instanceable>false</instanceable>
         <header-portlet-css>/css/main.css</header-portlet-css>
-        <header-portlet-css>/css/jquery-ui-1.8.13.custom.css</header-portlet-css>
-        <header-portlet-javascript>/js/jquery-1.6.1.min.js</header-portlet-javascript>
-        <header-portlet-javascript>/js/jquery-ui-1.8.13.custom.min.js</header-portlet-javascript>
     </portlet>
     <portlet>
         <portlet-name>dialoga</portlet-name>

@@ -93,5 +93,27 @@
         </div>
     </div>
 
+<script type="text/javascript">
+$(document).ready(function() {
+    var link;
+    var container = $("#versiculoDiv");
+    var contenidoVersiculo = $("#contenidoVersiculo");
+    
+    $(".caja a").click(function(e) {
+        if (!($(this).hasClass("importante"))) {
+            e.preventDefault();
+
+            link = $(this).attr("href");
+
+            container.slideUp();
+            
+            contenidoVersiculo.load('<portlet:resourceURL id="buscaVersiculo" />', link, function() {
+                container.slideDown();
+            });
+        }
+    });
+});
+</script>
+
 </c:if>
 

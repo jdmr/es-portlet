@@ -1,7 +1,6 @@
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 
-<div id="versiculoDiv">
-<c:if test="${not empty texto}">
+<div id="versiculoDiv" <c:if test="${empty texto}">style="display:none;"</c:if>>
     <div class="caja2">
         <div class="biblia">
             <div id="contenidoVersiculo">
@@ -24,11 +23,9 @@
             </div>
         </div>
     </div>
-</c:if>
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
-    var link;
     var container = $("#contenidoVersiculo");
     
     $("a#versiculoAnteriorLink").click(function(e) {

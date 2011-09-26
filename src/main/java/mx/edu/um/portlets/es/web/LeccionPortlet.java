@@ -18,6 +18,11 @@ import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBMessageServiceUtil;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.TimeZone;
 import javax.portlet.ActionRequest;
@@ -25,6 +30,9 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletSession;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
+import javax.sql.DataSource;
 import mx.edu.um.portlets.es.utils.EstadisticasUtil;
 import mx.edu.um.portlets.es.utils.TagsUtil;
 import mx.edu.um.portlets.es.utils.ZonaHorariaUtil;
@@ -34,6 +42,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -41,6 +50,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 /**
  *
@@ -51,6 +61,9 @@ import org.springframework.web.bind.support.SessionStatus;
 public class LeccionPortlet {
 
     private static final Logger log = LoggerFactory.getLogger(LeccionPortlet.class);
+    
+    @Autowired
+    private DataSource bibliaDS;
 
     public LeccionPortlet() {
         log.info("Se ha creado una nueva instancia del portlet de lecciones");
@@ -247,4 +260,168 @@ public class LeccionPortlet {
         return message;
     }
 
+    @ResourceMapping(value = "buscaVersiculo")
+    public void buscaVersiculo(@RequestParam(value="_biblia_WAR_esportlet_libro",required = false) Integer libro
+            , @RequestParam(value="_biblia_WAR_esportlet_capitulo",required = false) Integer capitulo 
+            , @RequestParam(value="_biblia_WAR_esportlet_versiculo",required = false) Integer versiculo
+            , @RequestParam(value="_biblia_WAR_esportlet_vid",required = false) Integer vid
+            , @RequestParam(value="_biblia_WAR_esportlet_version",required = false) Integer version
+            , ResourceRequest request, ResourceResponse response) {
+        log.debug("Buscando el versiculo con ajax");
+        if (vid != null) {
+            Connection conn = null;
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            try {
+                conn = bibliaDS.getConnection();
+                StringBuilder sb = new StringBuilder();
+                sb.append("select v.id, v.versiculo, l.nombre as libro, v.texto, v.libro_id, v.capitulo from ");
+                if (version != null) {
+                    sb.append(version).append(" v ");
+                } else {
+                    sb.append("rv2000 v ");
+                }
+                sb.append(", libros l ");
+                sb.append(" where v.libro_id = l.id ");
+                sb.append(" and v.id between ? and ? ");
+                sb.append(" order by v.id");
+
+                ps = conn.prepareStatement(sb.toString());
+                ps.setLong(1, vid);
+                ps.setLong(2, vid+5);
+                rs = ps.executeQuery();
+                StringBuilder resultado = new StringBuilder();
+                while (rs.next()) {
+                    if (libro == null ||
+                            libro != rs.getInt("libro_id") ||
+                            capitulo != rs.getInt("capitulo")) {
+                        libro = rs.getInt("libro_id");
+                        capitulo = rs.getInt("capitulo");
+                        resultado.append("<h2>");
+                        resultado.append(rs.getString("libro"));
+                        resultado.append(" ");
+                        resultado.append(rs.getInt("capitulo"));
+                        resultado.append(" : ");
+                        resultado.append(rs.getInt("versiculo"));
+                        resultado.append("</h2>");
+                    }
+                    resultado.append("<p>");
+                    resultado.append(rs.getInt("versiculo"));
+                    resultado.append(" ");
+                    resultado.append(rs.getString("texto"));
+                    resultado.append("</p>");
+                }
+                                
+                PrintWriter writer = response.getWriter();
+                writer.println(resultado.toString());
+                
+                request.getPortletSession().setAttribute("vid", vid, PortletSession.APPLICATION_SCOPE);
+            } catch (Exception e) {
+                log.error("No se pudo conectar a la base de datos",e);
+            } finally {
+                if (conn != null) {
+                    try {
+                        conn.close();
+                    } catch (SQLException ex) {
+                        log.error("No se pudo cerrar la conexion",ex);
+                    }
+                }
+            }
+
+        } else if (libro != null) {
+            Connection conn = null;
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            try {
+                conn = bibliaDS.getConnection();
+                StringBuilder sb = new StringBuilder();
+                sb.append("select v.id from ");
+                if (version != null) {
+                    sb.append(version).append(" v ");
+                } else {
+                    sb.append("rv2000 v ");
+                }
+                sb.append(", libros l ");
+                sb.append(" where v.libro_id = l.id ");
+                sb.append(" and v.libro_id = ? ");
+                sb.append(" and v.capitulo = ? ");
+                sb.append(" and v.versiculo >= ? ");
+                sb.append(" order by v.id limit 1");
+
+                if (capitulo == null) {
+                    capitulo = 1;
+                    versiculo = 1;
+                } else if (versiculo == null) {
+                    versiculo = 1;
+                }
+                
+                ps = conn.prepareStatement(sb.toString());
+                ps.setLong(1, libro);
+                ps.setLong(2, capitulo);
+                ps.setLong(3, versiculo);
+                rs = ps.executeQuery();
+                if (rs.next()) {
+                    vid = rs.getInt("id");
+                }
+                
+                sb = new StringBuilder();
+                sb.append("select v.id, v.versiculo, l.nombre as libro, v.texto, v.libro_id, v.capitulo from ");
+                if (version != null) {
+                    sb.append(version).append(" v ");
+                } else {
+                    sb.append("rv2000 v ");
+                }
+                sb.append(", libros l ");
+                sb.append(" where v.libro_id = l.id ");
+                sb.append(" and v.id between ? and ? ");
+                sb.append(" order by v.id");
+
+                ps = conn.prepareStatement(sb.toString());
+                ps.setLong(1, vid);
+                ps.setLong(2, vid+5);
+                rs = ps.executeQuery();
+                
+                StringBuilder resultado = new StringBuilder();
+                boolean primeraVuelta = true;
+                while (rs.next()) {
+                    if (libro != rs.getInt("libro_id") ||
+                            capitulo != rs.getInt("capitulo") ||
+                            primeraVuelta) {
+                        libro = rs.getInt("libro_id");
+                        capitulo = rs.getInt("capitulo");
+                        resultado.append("<h2>");
+                        resultado.append(rs.getString("libro"));
+                        resultado.append(" ");
+                        resultado.append(capitulo);
+                        resultado.append(" : ");
+                        resultado.append(rs.getInt("versiculo"));
+                        resultado.append("</h2>");
+                        primeraVuelta = false;
+                    }
+                    resultado.append("<p>");
+                    resultado.append(rs.getInt("versiculo"));
+                    resultado.append(" ");
+                    resultado.append(rs.getString("texto"));
+                    resultado.append("</p>");
+                }
+                
+                PrintWriter writer = response.getWriter();
+                writer.println(resultado.toString());
+                
+                request.getPortletSession().setAttribute("vid", vid, PortletSession.APPLICATION_SCOPE);
+            } catch (Exception e) {
+                log.error("No se pudo conectar a la base de datos",e);
+            } finally {
+                if (conn != null) {
+                    try {
+                        conn.close();
+                    } catch (SQLException ex) {
+                        log.error("No se pudo cerrar la conexion",ex);
+                    }
+                }
+            }
+        }
+        
+    } 
+    
 }
