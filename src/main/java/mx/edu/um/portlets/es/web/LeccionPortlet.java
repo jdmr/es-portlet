@@ -269,6 +269,8 @@ public class LeccionPortlet {
             , ResourceRequest request, ResourceResponse response) {
         log.debug("Buscando el versiculo con ajax");
         if (vid != null) {
+            request.getPortletSession().setAttribute("vid", vid, PortletSession.APPLICATION_SCOPE);
+            
             Connection conn = null;
             PreparedStatement ps = null;
             ResultSet rs = null;
@@ -315,7 +317,6 @@ public class LeccionPortlet {
                 PrintWriter writer = response.getWriter();
                 writer.println(resultado.toString());
                 
-                request.getPortletSession().setAttribute("vid", vid, PortletSession.APPLICATION_SCOPE);
             } catch (Exception e) {
                 log.error("No se pudo conectar a la base de datos",e);
             } finally {
@@ -362,6 +363,7 @@ public class LeccionPortlet {
                 rs = ps.executeQuery();
                 if (rs.next()) {
                     vid = rs.getInt("id");
+                    request.getPortletSession().setAttribute("vid", vid, PortletSession.APPLICATION_SCOPE);
                 }
                 
                 sb = new StringBuilder();
@@ -387,6 +389,9 @@ public class LeccionPortlet {
                     if (libro != rs.getInt("libro_id") ||
                             capitulo != rs.getInt("capitulo") ||
                             primeraVuelta) {
+                        if (primeraVuelta) {
+                            resultado.append("<form name='versiculoForm'><input type='hidden' name='vid' id='vid' value='").append(vid).append("'/></form>");
+                        }
                         libro = rs.getInt("libro_id");
                         capitulo = rs.getInt("capitulo");
                         resultado.append("<h2>");
@@ -408,7 +413,6 @@ public class LeccionPortlet {
                 PrintWriter writer = response.getWriter();
                 writer.println(resultado.toString());
                 
-                request.getPortletSession().setAttribute("vid", vid, PortletSession.APPLICATION_SCOPE);
             } catch (Exception e) {
                 log.error("No se pudo conectar a la base de datos",e);
             } finally {

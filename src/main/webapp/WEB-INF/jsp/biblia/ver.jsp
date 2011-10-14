@@ -4,6 +4,7 @@
     <div class="caja2">
         <div class="biblia">
             <div id="contenidoVersiculo">
+                <form name='versiculoForm'><input type='hidden' name='vid' id='vid' value='${vid}'/></form>
                 <h2>${ubicacion}</h2>
                 ${texto}
             </div>
@@ -30,15 +31,17 @@ $(document).ready(function() {
     
     $("a#versiculoAnteriorLink").click(function(e) {
         e.preventDefault();
-        container.load('<portlet:resourceURL id="versiculoAnterior" />', function() {
-            container.hide("slide",{direction:"right"});
+        container.hide("slide",{direction:"right"});
+        var vid = $("input#vid").val()
+        container.load('<portlet:resourceURL id="versiculoAnterior" />', {'vid':vid}, function() {
             container.show("slide",{direction:"left"});
         });
     });
     $("a#versiculoSiguienteLink").click(function(e) {
         e.preventDefault();
-        container.load('<portlet:resourceURL id="versiculoSiguiente" />', function() {
-            container.hide("slide",{direction:"left"});
+        container.hide("slide",{direction:"left"});
+        var vid = $("input#vid").val()
+        container.load('<portlet:resourceURL id="versiculoSiguiente" />', {'vid':vid}, function() {
             container.show("slide",{direction:"right"});
         });
     });

@@ -14,7 +14,6 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +47,7 @@ public class BibliaPortlet {
             , Model model) {
         log.debug("Mostrando el versiculo");
         if (vid != null) {
+            request.getPortletSession().setAttribute("vid", vid, PortletSession.APPLICATION_SCOPE);
             Connection conn = null;
             PreparedStatement ps = null;
             ResultSet rs = null;
@@ -73,7 +73,6 @@ public class BibliaPortlet {
                 StringBuilder nombre = new StringBuilder();
                 while (rs.next()) {
                     if(nombre.length() == 0) {
-                        vid = rs.getInt("id");
                         libro = rs.getInt("libro_id");
                         capitulo = rs.getInt("capitulo");
                         nombre.append(rs.getString("libro"));
@@ -104,7 +103,6 @@ public class BibliaPortlet {
                 model.addAttribute("ubicacion", nombre.toString());
                 model.addAttribute("texto", resultado.toString());
                 model.addAttribute("vid", vid);
-                request.getPortletSession().setAttribute("vid", vid, PortletSession.APPLICATION_SCOPE);
             } catch (Exception e) {
                 log.error("No se pudo conectar a la base de datos",e);
             } finally {
@@ -152,6 +150,7 @@ public class BibliaPortlet {
                 rs = ps.executeQuery();
                 if (rs.next()) {
                     vid = rs.getInt("id");
+                    request.getPortletSession().setAttribute("vid", vid, PortletSession.APPLICATION_SCOPE);
                 }
                 
                 sb = new StringBuilder();
@@ -205,7 +204,6 @@ public class BibliaPortlet {
                 model.addAttribute("ubicacion", nombre.toString());
                 model.addAttribute("texto", resultado.toString());
                 model.addAttribute("vid", vid);
-                request.getPortletSession().setAttribute("vid", vid, PortletSession.APPLICATION_SCOPE);
             } catch (Exception e) {
                 log.error("No se pudo conectar a la base de datos",e);
             } finally {
@@ -222,9 +220,11 @@ public class BibliaPortlet {
     }
     
     @ResourceMapping(value = "versiculoSiguiente")
-    public void versiculoSiguiente(ResourceRequest request, ResourceResponse response) {
-        log.debug("Versiculo siguiente");
-        Integer vid = (Integer) request.getPortletSession().getAttribute("vid", PortletSession.APPLICATION_SCOPE);
+    public void versiculoSiguiente(@RequestParam(required = false) Integer vid, ResourceRequest request, ResourceResponse response) {
+        log.debug("Versiculo siguiente {}",vid);
+        if (vid == null) {
+            vid = (Integer) request.getPortletSession().getAttribute("vid", PortletSession.APPLICATION_SCOPE);
+        }
         if (vid != null) {
             vid += 5;
             try {
@@ -239,7 +239,7 @@ public class BibliaPortlet {
             log.warn("No se pudo encontrar el vid en la sesion");
             StringBuilder resultado = new StringBuilder();
             resultado.append("<p>");
-            resultado.append("El versículo no alcanzó a cargar, favor de dar clic en el versículo de la lección otra vez...");
+            resultado.append("Por alguna razón no pudimos cargar el versículo, si el problema persiste, creemos que el problema tiene que ver con tu navegador, puedes intentar con uno más reciente, y realmente necesitamos tu ayuda, contáctanos mandando un correo a <a href='mailto:david.mendoza@um.edu.mx'>david.mendoza@um.edu.mx.</a>");
             resultado.append("</p>");
             try {
                 PrintWriter writer = response.getWriter();
@@ -251,9 +251,11 @@ public class BibliaPortlet {
     }
     
     @ResourceMapping(value = "versiculoAnterior")
-    public void versiculoAnterior(ResourceRequest request, ResourceResponse response) {
-        log.debug("Versiculo anterior");
-        Integer vid = (Integer) request.getPortletSession().getAttribute("vid", PortletSession.APPLICATION_SCOPE);
+    public void versiculoAnterior(@RequestParam(required = false) Integer vid, ResourceRequest request, ResourceResponse response) {
+        log.debug("Versiculo anterior {}",vid);
+        if (vid == null) {
+            vid = (Integer) request.getPortletSession().getAttribute("vid", PortletSession.APPLICATION_SCOPE);
+        }
         if (vid != null) {
             vid -= 5;
             try {
@@ -268,7 +270,7 @@ public class BibliaPortlet {
             log.warn("No se pudo encontrar el vid en la sesion");
             StringBuilder resultado = new StringBuilder();
             resultado.append("<p>");
-            resultado.append("El versículo no alcanzó a cargar, favor de dar clic en el versículo de la lección otra vez...");
+            resultado.append("Por alguna razón no pudimos cargar el versículo, si el problema persiste, creemos que el problema tiene que ver con tu navegador, puedes intentar con uno más reciente, y realmente necesitamos tu ayuda, contáctanos mandando un correo a <a href='mailto:david.mendoza@um.edu.mx'>david.mendoza@um.edu.mx.</a>");
             resultado.append("</p>");
             try {
                 PrintWriter writer = response.getWriter();
@@ -301,9 +303,15 @@ public class BibliaPortlet {
             rs = ps.executeQuery();
             
             StringBuilder resultado = new StringBuilder();
+            boolean primeraVuelta = true;
             while (rs.next()) {
                 if (libro != rs.getInt("libro_id") ||
-                        capitulo != rs.getInt("capitulo")) {
+                        capitulo != rs.getInt("capitulo")
+                        || primeraVuelta) {
+                    if (primeraVuelta) {
+                        resultado.append("<form name='versiculoForm'><input type='hidden' name='vid' id='vid' value='").append(vid).append("'/></form>");
+                        primeraVuelta = false;
+                    }
                     libro = rs.getInt("libro_id");
                     capitulo = rs.getInt("capitulo");
                     resultado.append("<h2>");

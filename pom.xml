@@ -168,7 +168,7 @@
     </dependencies>
     <properties>
         <liferay.auto.deploy.dir>/opt/portal/liferay-portal-6.0.6/deploy</liferay.auto.deploy.dir>
-        <liferay.version>6.0.5</liferay.version>
+        <liferay.version>6.0.6</liferay.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>
