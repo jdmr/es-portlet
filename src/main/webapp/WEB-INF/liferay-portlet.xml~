@@ -49,12 +49,6 @@
         <header-portlet-css>/css/main.css</header-portlet-css>
         <footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
     </portlet>
-     <portlet>
-        <portlet-name>conocenos</portlet-name>
-        <instanceable>false</instanceable>
-        <header-portlet-css>/css/main.css</header-portlet-css>
-        <footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
-    </portlet>
     <portlet>
         <portlet-name>navega</portlet-name>
         <instanceable>false</instanceable>
