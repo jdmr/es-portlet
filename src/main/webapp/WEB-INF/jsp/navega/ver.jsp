@@ -6,6 +6,10 @@
 	<input type="hidden" name="fechaNavegaTxt" id="fechaNavegaTxt" />
 </form>
 <div id="fechaNavega"></div>
+<c:if test="${audioLeccion != null}">
+    <div id="<portlet:namespace />podcastDiarioDiv" ></div>
+</c:if>
+
 <script type="text/javascript">
 $(document).ready(function() {
 	$( "#fechaNavega" ).datepicker({
@@ -22,5 +26,16 @@ $(document).ready(function() {
 		}
 	});
 	$( "#fechaNavega" ).datepicker($.datepicker.regional['es']);
+        
+        <c:if test="${audioLeccion != null}">
+        jwplayer("<portlet:namespace />podcastDiarioDiv").setup({
+        'flashplayer': '/es-portlet/jwplayer/player.swf',
+        'file': '${podcastDiarioURL}',
+        'controlbar': 'bottom',
+        'width': '260',
+        'height': '24',
+        'provider': 'sound'
+        });
+        </c:if>
 });
 </script>

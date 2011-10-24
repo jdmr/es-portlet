@@ -16,8 +16,14 @@
             <img alt="" src="${imagenLeccion}" />
         </c:otherwise>
     </c:choose>
+    <c:if test="${audioLeccion != null}">
+        <div id="<portlet:namespace />podcastSemanalDiv" ></div>
+    </c:if>
 </div>
 <div id="home-top-right">
+    <c:if test="${audioLeccion2 != null}">
+        <div id="<portlet:namespace />podcastDiarioDiv" ></div>
+    </c:if>
     <p class="titulo"><a href="/estudia" class="titulo">${tituloLeccion}</a></p>
     <p class="fecha">${fecha}</p>
     <p class="top">${contenidoLeccion}</p>
@@ -51,3 +57,26 @@
         </c:forEach>
     </div>
 </div>
+<c:if test="${audioLeccion != null}">
+    <script type="text/javascript">
+    $(document).ready(function() {
+        jwplayer("<portlet:namespace />podcastSemanalDiv").setup({
+        'flashplayer': '/es-portlet/jwplayer/player.swf',
+        'file': '${podcastSemanalURL}',
+        'controlbar': 'bottom',
+        'width': '640',
+        'height': '24',
+        'provider': 'sound'
+        });
+        
+        jwplayer("<portlet:namespace />podcastDiarioDiv").setup({
+        'flashplayer': '/es-portlet/jwplayer/player.swf',
+        'file': '${podcastDiarioURL}',
+        'controlbar': 'bottom',
+        'width': '270',
+        'height': '24',
+        'provider': 'sound'
+        });
+    });
+    </script>
+</c:if>

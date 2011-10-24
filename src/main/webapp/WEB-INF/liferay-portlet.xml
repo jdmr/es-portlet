@@ -6,6 +6,8 @@
         <portlet-name>inicio</portlet-name>
         <instanceable>false</instanceable>
         <header-portlet-css>/css/main.css</header-portlet-css>
+        <header-portlet-javascript>/jwplayer/jwplayer.js</header-portlet-javascript>
+        <header-portlet-javascript>/js/jquery-1.6.1.min.js</header-portlet-javascript>
         <footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
     </portlet>
     <portlet>
@@ -61,6 +63,7 @@
         <header-portlet-css>/css/main.css</header-portlet-css>
         <header-portlet-css>/css/navega.css</header-portlet-css>
         <header-portlet-css>/css/jquery-ui-1.8.13.custom.css</header-portlet-css>
+        <header-portlet-javascript>/jwplayer/jwplayer.js</header-portlet-javascript>
         <header-portlet-javascript>/js/jquery-1.6.1.min.js</header-portlet-javascript>
         <header-portlet-javascript>/js/jquery-ui-1.8.13.custom.min.js</header-portlet-javascript>
         <header-portlet-javascript>/js/i18n/jquery.ui.datepicker-es.js</header-portlet-javascript>

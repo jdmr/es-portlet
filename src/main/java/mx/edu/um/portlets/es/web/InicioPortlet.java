@@ -1,7 +1,6 @@
 package mx.edu.um.portlets.es.web;
 
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.util.*;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -11,6 +10,8 @@ import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 import com.liferay.portlet.asset.service.persistence.AssetEntryQuery;
 import com.liferay.portlet.bookmarks.model.BookmarksEntry;
 import com.liferay.portlet.bookmarks.service.BookmarksEntryLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
 import java.util.ArrayList;
@@ -73,6 +74,7 @@ public class InicioPortlet {
 
             // Busca el contenido del dia
             String[] tags = TagsUtil.getTagsConDia(new String[4], hoy);
+            String[] etiquetas = ArrayUtil.clone(tags);
 
             long[] assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
 
@@ -92,7 +94,7 @@ public class InicioPortlet {
                     model.addAttribute("fecha", fecha);
                 }
             }
-            
+
             log.debug("Buscando el versiculo");
             tags[3] = "versiculo";
             assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
@@ -106,7 +108,7 @@ public class InicioPortlet {
                     JournalArticle ja = JournalArticleLocalServiceUtil.getLatestArticle(asset.getClassPK());
                     AssetEntryServiceUtil.incrementViewCounter(asset.getClassName(), ja.getResourcePrimKey());
                     String contenido = JournalArticleLocalServiceUtil.getArticleContent(ja.getGroupId(), ja.getArticleId(), "view", "" + themeDisplay.getLocale(), themeDisplay);
-                    
+
                     model.addAttribute("versiculo", contenido);
                     break;
                 }
@@ -129,7 +131,7 @@ public class InicioPortlet {
                     break;
                 }
             }
-            
+
             if (!encontreVideo) {
                 model.addAttribute("imagenLeccion", "/image/image_gallery?uuid=16ba78f1-fa53-43be-9067-ade8d617fe1c&groupId=15711&t=1309812667536");
             }
@@ -174,7 +176,7 @@ public class InicioPortlet {
                     url.append(asset.getClassPK());
                     url.append("&_dialoga_WAR_esportlet_action=completo");
                     User autor = UserLocalServiceUtil.getUser(asset.getUserId());
-                    temasDialoga.add(new TemaUtil(asset.getPrimaryKey(),asset.getClassPK(),asset.getTitle().toUpperCase(), autor.getFullName(), StringUtil.shorten(asset.getDescription(), 300), url.toString()));
+                    temasDialoga.add(new TemaUtil(asset.getPrimaryKey(), asset.getClassPK(), asset.getTitle().toUpperCase(), autor.getFullName(), StringUtil.shorten(asset.getDescription(), 300), url.toString()));
                 }
             }
             model.addAttribute("temasDialoga", temasDialoga);
@@ -198,10 +200,60 @@ public class InicioPortlet {
                     url.append(asset.getClassPK());
                     url.append("&_comunica_WAR_esportlet_action=completo");
                     User autor = UserLocalServiceUtil.getUser(asset.getUserId());
-                    temasComunica.add(new TemaUtil(asset.getPrimaryKey(),asset.getClassPK(),asset.getTitle().toUpperCase(), autor.getFullName(), StringUtil.shorten(asset.getDescription(), 300), url.toString()));
+                    temasComunica.add(new TemaUtil(asset.getPrimaryKey(), asset.getClassPK(), asset.getTitle().toUpperCase(), autor.getFullName(), StringUtil.shorten(asset.getDescription(), 300), url.toString()));
                 }
             }
             model.addAttribute("temasComunica", temasComunica);
+
+            // Buscando podcast semanal
+            log.debug("Buscando podcast semanal");
+            //tags = TagsUtil.getTagsConDia(new String[5], hoy);
+            tags[3] = "podcast";
+            String[] x = ArrayUtil.append(tags, "semanal");
+            tags = x;
+            assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
+
+            assetEntryQuery.setAllTagIds(assetTagIds);
+
+            results = AssetEntryServiceUtil.getEntries(assetEntryQuery);
+            for (AssetEntry asset : results) {
+                if (asset.getClassName().equals(DLFileEntry.class.getName())) {
+                    DLFileEntry fileEntry = DLFileEntryLocalServiceUtil.getFileEntry(asset.getClassPK());
+                    model.addAttribute("audioLeccion",true);
+                    model.addAttribute("podcastSemanalURL",
+                            "/documents/" 
+                            + themeDisplay.getScopeGroupId() 
+                            + StringPool.SLASH 
+                            + fileEntry.getUuid());
+                }
+            }
+
+            // Buscando podcast diario
+            log.debug("Buscando podcast diario");
+            etiquetas[4] = "podcast";
+            tags = etiquetas;
+            for(String s : tags) {
+                log.debug("Tags: {}",s);
+            }
+            assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
+
+            assetEntryQuery.setAllTagIds(assetTagIds);
+
+            results = AssetEntryServiceUtil.getEntries(assetEntryQuery);
+            for (AssetEntry asset : results) {
+                log.debug("TIPO: {}", asset.getClassName());
+                if (asset.getClassName().equals(DLFileEntry.class.getName())) {
+                    log.debug("Lo encontre!!!");
+                    DLFileEntry fileEntry = DLFileEntryLocalServiceUtil.getFileEntry(asset.getClassPK());
+                    model.addAttribute("audioLeccion2",true);
+                    model.addAttribute("podcastDiarioURL",
+                            "/documents/" 
+                            + themeDisplay.getScopeGroupId() 
+                            + StringPool.SLASH 
+                            + fileEntry.getUuid());
+                }
+            }
+
 
         } catch (Exception e) {
             log.error("No se pudo cargar el contenido", e);
@@ -210,5 +262,4 @@ public class InicioPortlet {
 
         return "inicio/ver";
     }
-
 }

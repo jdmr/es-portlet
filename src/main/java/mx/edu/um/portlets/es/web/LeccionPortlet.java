@@ -25,13 +25,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.TimeZone;
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletSession;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.ResourceRequest;
-import javax.portlet.ResourceResponse;
+import javax.portlet.*;
 import javax.sql.DataSource;
 import mx.edu.um.portlets.es.utils.EstadisticasUtil;
 import mx.edu.um.portlets.es.utils.TagsUtil;
@@ -61,7 +55,6 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 public class LeccionPortlet {
 
     private static final Logger log = LoggerFactory.getLogger(LeccionPortlet.class);
-    
     @Autowired
     private DataSource bibliaDS;
 
@@ -95,8 +88,10 @@ public class LeccionPortlet {
                 DateTimeFormatter fmt3 = DateTimeFormat.forPattern("dd/MM/yyyy");
                 request.getPortletSession().setAttribute("hoyString", fmt3.print(hoy));
             }
+            
+            String[] tags = TagsUtil.getTagsConDia(new String[4], hoy);
 
-            long[] assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, TagsUtil.getTagsConDia(new String[4], hoy));
+            long[] assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
 
             assetEntryQuery.setAllTagIds(assetTagIds);
 
@@ -123,6 +118,7 @@ public class LeccionPortlet {
                     break;
                 }
             }
+
 
         } catch (Exception e) {
             log.error("No se pudo cargar el contenido", e);
@@ -261,16 +257,11 @@ public class LeccionPortlet {
     }
 
     @ResourceMapping(value = "buscaVersiculo")
-    public void buscaVersiculo(@RequestParam(value="_biblia_WAR_esportlet_libro",required = false) Integer libro
-            , @RequestParam(value="_biblia_WAR_esportlet_capitulo",required = false) Integer capitulo 
-            , @RequestParam(value="_biblia_WAR_esportlet_versiculo",required = false) Integer versiculo
-            , @RequestParam(value="_biblia_WAR_esportlet_vid",required = false) Integer vid
-            , @RequestParam(value="_biblia_WAR_esportlet_version",required = false) Integer version
-            , ResourceRequest request, ResourceResponse response) {
+    public void buscaVersiculo(@RequestParam(value = "_biblia_WAR_esportlet_libro", required = false) Integer libro, @RequestParam(value = "_biblia_WAR_esportlet_capitulo", required = false) Integer capitulo, @RequestParam(value = "_biblia_WAR_esportlet_versiculo", required = false) Integer versiculo, @RequestParam(value = "_biblia_WAR_esportlet_vid", required = false) Integer vid, @RequestParam(value = "_biblia_WAR_esportlet_version", required = false) Integer version, ResourceRequest request, ResourceResponse response) {
         log.debug("Buscando el versiculo con ajax");
         if (vid != null) {
             request.getPortletSession().setAttribute("vid", vid, PortletSession.APPLICATION_SCOPE);
-            
+
             Connection conn = null;
             PreparedStatement ps = null;
             ResultSet rs = null;
@@ -290,13 +281,13 @@ public class LeccionPortlet {
 
                 ps = conn.prepareStatement(sb.toString());
                 ps.setLong(1, vid);
-                ps.setLong(2, vid+5);
+                ps.setLong(2, vid + 5);
                 rs = ps.executeQuery();
                 StringBuilder resultado = new StringBuilder();
                 while (rs.next()) {
-                    if (libro == null ||
-                            libro != rs.getInt("libro_id") ||
-                            capitulo != rs.getInt("capitulo")) {
+                    if (libro == null
+                            || libro != rs.getInt("libro_id")
+                            || capitulo != rs.getInt("capitulo")) {
                         libro = rs.getInt("libro_id");
                         capitulo = rs.getInt("capitulo");
                         resultado.append("<h2>");
@@ -313,18 +304,18 @@ public class LeccionPortlet {
                     resultado.append(rs.getString("texto"));
                     resultado.append("</p>");
                 }
-                                
+
                 PrintWriter writer = response.getWriter();
                 writer.println(resultado.toString());
-                
+
             } catch (Exception e) {
-                log.error("No se pudo conectar a la base de datos",e);
+                log.error("No se pudo conectar a la base de datos", e);
             } finally {
                 if (conn != null) {
                     try {
                         conn.close();
                     } catch (SQLException ex) {
-                        log.error("No se pudo cerrar la conexion",ex);
+                        log.error("No se pudo cerrar la conexion", ex);
                     }
                 }
             }
@@ -355,7 +346,7 @@ public class LeccionPortlet {
                 } else if (versiculo == null) {
                     versiculo = 1;
                 }
-                
+
                 ps = conn.prepareStatement(sb.toString());
                 ps.setLong(1, libro);
                 ps.setLong(2, capitulo);
@@ -365,7 +356,7 @@ public class LeccionPortlet {
                     vid = rs.getInt("id");
                     request.getPortletSession().setAttribute("vid", vid, PortletSession.APPLICATION_SCOPE);
                 }
-                
+
                 sb = new StringBuilder();
                 sb.append("select v.id, v.versiculo, l.nombre as libro, v.texto, v.libro_id, v.capitulo from ");
                 if (version != null) {
@@ -380,15 +371,15 @@ public class LeccionPortlet {
 
                 ps = conn.prepareStatement(sb.toString());
                 ps.setLong(1, vid);
-                ps.setLong(2, vid+5);
+                ps.setLong(2, vid + 5);
                 rs = ps.executeQuery();
-                
+
                 StringBuilder resultado = new StringBuilder();
                 boolean primeraVuelta = true;
                 while (rs.next()) {
-                    if (libro != rs.getInt("libro_id") ||
-                            capitulo != rs.getInt("capitulo") ||
-                            primeraVuelta) {
+                    if (libro != rs.getInt("libro_id")
+                            || capitulo != rs.getInt("capitulo")
+                            || primeraVuelta) {
                         if (primeraVuelta) {
                             resultado.append("<form name='versiculoForm'><input type='hidden' name='vid' id='vid' value='").append(vid).append("'/></form>");
                         }
@@ -409,23 +400,22 @@ public class LeccionPortlet {
                     resultado.append(rs.getString("texto"));
                     resultado.append("</p>");
                 }
-                
+
                 PrintWriter writer = response.getWriter();
                 writer.println(resultado.toString());
-                
+
             } catch (Exception e) {
-                log.error("No se pudo conectar a la base de datos",e);
+                log.error("No se pudo conectar a la base de datos", e);
             } finally {
                 if (conn != null) {
                     try {
                         conn.close();
                     } catch (SQLException ex) {
-                        log.error("No se pudo cerrar la conexion",ex);
+                        log.error("No se pudo cerrar la conexion", ex);
                     }
                 }
             }
         }
-        
-    } 
-    
+
+    }
 }
