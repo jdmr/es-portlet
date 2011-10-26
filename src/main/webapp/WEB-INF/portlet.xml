@@ -310,18 +310,18 @@
         <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
         <init-param>
             <name>contextConfigLocation</name>
-            <value>/WEB-INF/classes/context/portlet/inicio.xml</value>
+            <value>/WEB-INF/classes/context/portlet/conocenos.xml</value>
         </init-param>
         <expiration-cache>0</expiration-cache>
         <supports>
             <mime-type>text/html</mime-type>
             <portlet-mode>VIEW</portlet-mode>
         </supports>
-        <resource-bundle>inicio</resource-bundle>
+        <resource-bundle>conocenos</resource-bundle>
         <portlet-info>
-            <title>Inicio</title>
-            <short-title>Inicio</short-title>
-            <keywords>inicio</keywords>
+            <title>Conocenos</title>
+            <short-title>conocenos</short-title>
+            <keywords>conocenos</keywords>
         </portlet-info>
         <security-role-ref>
             <role-name>administrator</role-name>

@@ -2,7 +2,6 @@ package mx.edu.um.portlets.es.web;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -13,15 +12,9 @@ import com.liferay.portlet.asset.service.persistence.AssetEntryQuery;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 import java.util.List;
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletSession;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
+import javax.portlet.*;
 import mx.edu.um.portlets.es.utils.EstadisticasUtil;
 import mx.edu.um.portlets.es.utils.TagsUtil;
-
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -92,5 +85,4 @@ public class NavegaPortlet {
         request.getPortletSession().setAttribute("hoy", hoy, PortletSession.APPLICATION_SCOPE);
         request.getPortletSession().setAttribute("hoyString", fechaNavegaTxt, PortletSession.APPLICATION_SCOPE);
     }
-    
 }

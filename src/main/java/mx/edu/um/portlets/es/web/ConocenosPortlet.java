@@ -1,4 +1,4 @@
-package mx.edu.um.portlets.escuelasabatica;
+package mx.edu.um.portlets.es.web;
 
 import com.liferay.portal.kernel.servlet.ImageServletTokenUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
@@ -43,26 +43,18 @@ public class ConocenosPortlet {
             UserGroup group = UserGroupLocalServiceUtil.getUserGroup(themeDisplay.getCompanyId(), "Editores");
             List<User> usuarios = UserLocalServiceUtil.getUserGroupUsers(group.getUserGroupId());
             List<Perfil> perfiles = new ArrayList<Perfil>();
-            for(User usuario : usuarios) {
-                String acercaDe = HtmlUtil.escape(ExpandoValueLocalServiceUtil.getData(usuario.getCompanyId(), User.class.getName(), "SN", "aboutMe", usuario.getUserId(), StringPool.BLANK)); 
+            for (User usuario : usuarios) {
+                String acercaDe = HtmlUtil.escape(ExpandoValueLocalServiceUtil.getData(usuario.getCompanyId(), User.class.getName(), "SN", "aboutMe", usuario.getUserId(), StringPool.BLANK));
                 String imagen = themeDisplay.getPathImage() + "/user_portrait?img_id=" + usuario.getPortraitId() + "&t=" + ImageServletTokenUtil.getToken(usuario.getPortraitId());
                 String profileUrl = "/web/" + usuario.getScreenName();
 
                 perfiles.add(
                         new Perfil(
-                        usuario.getFullName()
-                        ,usuario.getContact().getJobTitle()
-                        ,usuario.getContact().getTwitterSn()
-                        ,usuario.getContact().getFacebookSn()
-                        ,acercaDe
-                        ,imagen
-                        ,usuario.getEmailAddress()
-                        ,profileUrl
-                        ));
+                        usuario.getFullName(), usuario.getContact().getJobTitle(), usuario.getContact().getTwitterSn(), usuario.getContact().getFacebookSn(), acercaDe, imagen, usuario.getEmailAddress(), profileUrl));
             }
             request.setAttribute("perfiles", perfiles);
         } catch (Exception e) {
-            log.error("No se pudo obtener la lista de miembros de editores",e);
+            log.error("No se pudo obtener la lista de miembros de editores", e);
         }
         return "conocenos/ver";
     }
