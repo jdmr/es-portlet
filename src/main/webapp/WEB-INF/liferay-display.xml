@@ -13,5 +13,6 @@
         <portlet id="comunica" />
         <portlet id="navega" />
 	<portlet id="conocenos" />
+	<portlet id="misArticulos" />
     </category>
 </display>

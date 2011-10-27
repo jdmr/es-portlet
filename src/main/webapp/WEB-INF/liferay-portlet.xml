@@ -51,7 +51,7 @@
         <header-portlet-css>/css/main.css</header-portlet-css>
         <footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
     </portlet>
-     <portlet>
+    <portlet>
         <portlet-name>conocenos</portlet-name>
         <instanceable>false</instanceable>
         <header-portlet-css>/css/main.css</header-portlet-css>
@@ -68,6 +68,12 @@
         <header-portlet-javascript>/js/jquery-ui-1.8.13.custom.min.js</header-portlet-javascript>
         <header-portlet-javascript>/js/i18n/jquery.ui.datepicker-es.js</header-portlet-javascript>
         <footer-portlet-javascript>/js/navega.js</footer-portlet-javascript>
+    </portlet>
+    <portlet>
+        <portlet-name>misArticulos</portlet-name>
+        <instanceable>false</instanceable>
+        <header-portlet-css>/css/main.css</header-portlet-css>
+        <footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
     </portlet>
     <role-mapper>
         <role-name>administrator</role-name>

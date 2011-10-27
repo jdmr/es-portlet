@@ -82,5 +82,32 @@ public class TemaUtil {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TemaUtil other = (TemaUtil) obj;
+        if (this.assetId != other.assetId && (this.assetId == null || !this.assetId.equals(other.assetId))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 79 * hash + (this.assetId != null ? this.assetId.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public String toString() {
+        return "TemaUtil{" + "assetId=" + assetId + ", entradaId=" + entradaId + ", titulo=" + titulo + ", autor=" + autor + ", contenido=" + contenido + ", url=" + url + '}';
+    }
     
 }
