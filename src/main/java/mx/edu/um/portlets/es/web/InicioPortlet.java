@@ -75,6 +75,7 @@ public class InicioPortlet {
             // Busca el contenido del dia
             String[] tags = TagsUtil.getTagsConDia(new String[4], hoy);
             String[] etiquetas = ArrayUtil.clone(tags);
+            log.debug("Buscando contenido del dia");
 
             long[] assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
 
@@ -95,8 +96,8 @@ public class InicioPortlet {
                 }
             }
 
-            log.debug("Buscando el versiculo");
             tags[3] = "versiculo";
+            log.debug("Buscando el versiculo");
             assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
 
             assetEntryQuery.setAllTagIds(assetTagIds);
@@ -114,8 +115,8 @@ public class InicioPortlet {
                 }
             }
 
-            log.debug("Buscando el video");
             tags[3] = "video";
+            log.debug("Buscando el video");
             assetTagIds = AssetTagLocalServiceUtil.getTagIds(scopeGroupId, tags);
 
             assetEntryQuery.setAllTagIds(assetTagIds);

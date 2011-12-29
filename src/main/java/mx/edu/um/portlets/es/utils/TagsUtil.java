@@ -18,6 +18,7 @@ public class TagsUtil {
         DateTime inicio = new DateTime(2011, 3, 26, 0, 0, 0, 0, hoy.getZone());
         DateTime t3a2011 = new DateTime(2011, 6, 25, 0, 0, 0, 0, hoy.getZone());
         DateTime t4a2011 = new DateTime(2011, 9, 24, 0, 0, 0, 0, hoy.getZone());
+        DateTime t1a2012 = new DateTime(2011, 12, 31, 0, 0, 0, 0, hoy.getZone());
         if (hoy.isBefore(inicio)) {
             hoy = inicio;
         }
@@ -32,9 +33,12 @@ public class TagsUtil {
         } else if (hoy.isEqual(t3a2011) || (hoy.isAfter(t3a2011) && hoy.isBefore(t4a2011))) {
             tags[1] = "t3";
             weeks = Weeks.weeksBetween(t3a2011, hoy);
-        } else {
+        } else if (hoy.isEqual(t4a2011) || (hoy.isAfter(t4a2011) && hoy.isBefore(t1a2012))) {
             tags[1] = "t4";
             weeks = Weeks.weeksBetween(t4a2011, hoy);
+        } else {
+            tags[1] = "t1";
+            weeks = Weeks.weeksBetween(t1a2012, hoy);
         }
         tags[2] = "l" + nf.format(weeks.getWeeks() + 1);
         log.debug("TAGS: {} {} {}", tags);
