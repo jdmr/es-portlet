@@ -37,6 +37,7 @@ public class TagsUtil {
             tags[1] = "t4";
             weeks = Weeks.weeksBetween(t4a2011, hoy);
         } else {
+            tags[0] = "2012";
             tags[1] = "t1";
             weeks = Weeks.weeksBetween(t1a2012, hoy);
         }
