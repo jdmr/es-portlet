@@ -2,11 +2,11 @@
 <c:if test="${contenidoTema != null}">
     <div class="caja2">
         <div class="resumenArticulo">
-            <p class="titulo"><a class="titulo" href="${verTema}" target="_blank">${tituloTema}</a></p>
-            <p class="autor">${autorTema}</p>
+            <h3><a class="titulo" href="${verTema}" target="_blank">${tituloTema}</a></h3>
+            <h5>Por ${autorTema}</h5>
             <p>${contenidoTema}</p>
             <p class="liga">
-                <a href="${verTema}" target="_blank"><liferay-ui:message key="resumen.leerMas" /></a>
+                <a href="${verTema}" class="btn btn-primary" target="_blank"><liferay-ui:message key="resumen.leerMas" /></a>
             </p>
         </div>
     </div>

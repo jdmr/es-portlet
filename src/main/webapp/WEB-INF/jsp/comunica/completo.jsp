@@ -1,10 +1,10 @@
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 <portlet:renderURL var="regresar" />
-<div class="articulo">
-    <p class="tituloPrincipal">${entrada.title}</p>
-    <p class="autorPrincipal">${autor}</p>
-    <div class="caja">
-        ${contenido}
+<div class="row">
+    <div class="span12">
+        <h1>${entrada.title}</h1>
+        <h4>${autor}</h4>
+        <span>${contenido}</span>
         <div>
             <div>
                 <c:choose>
@@ -26,14 +26,15 @@
                     classPK="${entrada.resourcePrimKey}"
                     />
             </div>
-            <div style="padding: 10px 0;">
+            <div style="margin: 10px 0;">
                 <!-- AddThis Button BEGIN -->
                 <div class="addthis_toolbox addthis_default_style ">
-                    <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+                    <a class="addthis_button_facebook_like" fb:like:layout="button_count" fb:like:width="120"></a> 
                     <a class="addthis_button_tweet"></a>
+                    <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
                     <a class="addthis_counter addthis_pill_style"></a>
                 </div>
-                <script type="text/javascript">var addthis_config = {"data_track_clickback":true};</script>
+                <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
                 <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4d8a78014d97ad87"></script>
                 <!-- AddThis Button END -->
             </div>

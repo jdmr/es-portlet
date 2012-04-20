@@ -10,18 +10,18 @@
     <portlet:param name="dias" value="${dias + 1}" />
     <portlet:param name="action" value="navega" />
 </portlet:actionURL>
-<div>
-    <div class="anterior">
-        <a class="navegacion" href="${anterior}"><< <liferay-ui:message key="leccion.anterior" /></a>
+<div class="row-fluid">
+    <div class="span4">
+        <a class="navegacion" href="${anterior}"><i class="icon-chevron-left"></i> <liferay-ui:message key="leccion.anterior" /></a>
     </div>
-    <div class="fechaHoy">
-        ${fecha}
+    <div class="span4" style="text-align: center;">
+        <h6>${fecha}</h6>
     </div>
-    <div class="siguiente">
-        <a class="navegacion" href="${siguiente}"><liferay-ui:message key="leccion.siguiente" /> >></a>
+    <div class="span4" style="text-align: right;">
+        <a class="navegacion" href="${siguiente}"><liferay-ui:message key="leccion.siguiente" /> <i class="icon-chevron-right"></i></a>
     </div>
 </div>
-<h1 class="tituloLeccion">
+<h1 style="text-align: center;">
     <c:choose>
         <c:when test="${leccion != null}">
             ${leccion.title}
@@ -57,14 +57,14 @@
                     classPK="${leccion.resourcePrimKey}"
                     />
             </div>
-            <div class="mensajesDiscusion">
+            <div class="mensajesDiscusion" style="margin-top: 20px;">
                 <!-- AddThis Button BEGIN -->
                 <div class="addthis_toolbox addthis_default_style ">
-                    <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+                    <a class="addthis_button_facebook_like" fb:like:layout="button_count" fb:like:width="120"></a> 
                     <a class="addthis_button_tweet"></a>
+                    <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
                     <a class="addthis_counter addthis_pill_style"></a>
                 </div>
-                <script type="text/javascript">var addthis_config = {"data_track_clickback":true};</script>
                 <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4d8a78014d97ad87"></script>
                 <!-- AddThis Button END -->
             </div>

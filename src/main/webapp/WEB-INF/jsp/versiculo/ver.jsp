@@ -1,5 +1,5 @@
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 
 <c:if test="${contenido != null}">
-    <div id="versiculo">${contenido}</div>
+    <blockquote>${contenido}</blockquote>
 </c:if>
