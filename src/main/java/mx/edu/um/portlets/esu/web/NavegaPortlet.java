@@ -2,6 +2,7 @@ package mx.edu.um.portlets.esu.web;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -75,12 +76,16 @@ public class NavegaPortlet {
 
     @RequestMapping(params = "action=cambiaFecha")
     public void cambiaFecha(ActionRequest request, ActionResponse response,
-            @RequestParam String fechaNavegaTxt,
+            @RequestParam(required = false) String fechaNavegaTxt,
             @ModelAttribute EstadisticasUtil estadisticasUtil,
             BindingResult result,
             Model model, SessionStatus sessionStatus) {
-        log.debug("Asignando fecha {}", fechaNavegaTxt);
         DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
+        if (fechaNavegaTxt == null) {
+            DateTime now = new DateTime();
+            fechaNavegaTxt = ParamUtil.get(request, "fechaNavegaTxt", fmt.print(now));
+        }
+        log.debug("Asignando fecha {}", fechaNavegaTxt);
         DateTime hoy = fmt.parseDateTime(fechaNavegaTxt);
         request.getPortletSession().setAttribute("hoy", hoy, PortletSession.APPLICATION_SCOPE);
         request.getPortletSession().setAttribute("hoyString", fechaNavegaTxt, PortletSession.APPLICATION_SCOPE);

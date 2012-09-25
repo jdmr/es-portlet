@@ -20,13 +20,15 @@ public class TagsUtil {
         DateTime t4a2011 = new DateTime(2011, 9, 24, 0, 0, 0, 0, hoy.getZone());
         DateTime t1a2012 = new DateTime(2011, 12, 31, 0, 0, 0, 0, hoy.getZone());
         DateTime t2a2012 = new DateTime(2012, 3, 31, 0, 0, 0, 0, hoy.getZone());
+        DateTime t3a2012 = new DateTime(2012, 6, 30, 0, 0, 0, 0, hoy.getZone());
+        DateTime t4a2012 = new DateTime(2012, 10, 6, 0, 0, 0, 0, hoy.getZone());
         if (hoy.isBefore(inicio)) {
             hoy = inicio;
         }
         log.debug("HOY: {}", hoy);
         NumberFormat nf = NumberFormat.getInstance();
         nf.setMinimumIntegerDigits(2);
-        Weeks weeks = null;
+        Weeks weeks;
         tags[0] = new Integer(hoy.getYear()).toString();
         if (hoy.isEqual(inicio) || (hoy.isAfter(inicio) && hoy.isBefore(t3a2011))) {
             tags[1] = "t2";
@@ -40,10 +42,16 @@ public class TagsUtil {
         } else if (hoy.isEqual(t1a2012) || (hoy.isAfter(t1a2012) && hoy.isBefore(t2a2012))) {
             tags[1] = "t1";
             weeks = Weeks.weeksBetween(t1a2012, hoy);
-        } else {
-            tags[0] = "2012";
+        } else if (hoy.isEqual(t2a2012) || (hoy.isAfter(t2a2012) && hoy.isBefore(t3a2012))) {
             tags[1] = "t2";
             weeks = Weeks.weeksBetween(t2a2012, hoy);
+        } else if (hoy.isEqual(t2a2012) || (hoy.isAfter(t3a2012) && hoy.isBefore(t4a2012))) {
+            tags[1] = "t3";
+            weeks = Weeks.weeksBetween(t3a2012, hoy);
+        } else {
+            tags[0] = "2012";
+            tags[1] = "t4";
+            weeks = Weeks.weeksBetween(t3a2012, hoy);
         }
         tags[2] = "l" + nf.format(weeks.getWeeks() + 1);
         log.debug("TAGS: {} {} {}", tags);

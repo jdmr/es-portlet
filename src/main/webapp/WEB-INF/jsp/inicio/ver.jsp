@@ -6,8 +6,8 @@
                 <p style="text-align:center;">
                 <iframe 
                     src="${videoLeccion}" 
-                    width="640"
-                    height="315"
+                    width="100%"
+                    height="360"
                     frameborder="0">
                 </iframe>
                 </p>
