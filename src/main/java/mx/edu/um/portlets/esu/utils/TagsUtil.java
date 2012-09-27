@@ -21,7 +21,7 @@ public class TagsUtil {
         DateTime t1a2012 = new DateTime(2011, 12, 31, 0, 0, 0, 0, hoy.getZone());
         DateTime t2a2012 = new DateTime(2012, 3, 31, 0, 0, 0, 0, hoy.getZone());
         DateTime t3a2012 = new DateTime(2012, 6, 30, 0, 0, 0, 0, hoy.getZone());
-        DateTime t4a2012 = new DateTime(2012, 10, 6, 0, 0, 0, 0, hoy.getZone());
+        DateTime t4a2012 = new DateTime(2012, 9, 29, 0, 0, 0, 0, hoy.getZone());
         if (hoy.isBefore(inicio)) {
             hoy = inicio;
         }
