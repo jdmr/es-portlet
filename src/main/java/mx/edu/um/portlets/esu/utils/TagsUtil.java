@@ -51,7 +51,7 @@ public class TagsUtil {
         } else {
             tags[0] = "2012";
             tags[1] = "t4";
-            weeks = Weeks.weeksBetween(t3a2012, hoy);
+            weeks = Weeks.weeksBetween(t4a2012, hoy);
         }
         tags[2] = "l" + nf.format(weeks.getWeeks() + 1);
         log.debug("TAGS: {} {} {}", tags);
